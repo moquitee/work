@@ -1,0 +1,192 @@
+<template>
+	<div class="shop_detail_container">
+		<header class="shop_detail_header">
+			<span>&lt;</span>
+			<h1>商家详情</h1>
+		</header>
+		
+		<div class="shop_activities_properties_container">
+			<h1 class="shop_status_header">
+				活动与属性
+			</h1>
+			
+			<section class="shop_activities_properties">
+				<ul>
+					<li>
+						<span>保</span>
+						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
+					</li>
+					<li>
+						<span>保</span>
+						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
+					</li>
+					<li>
+						<span>保</span>
+						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
+					</li>
+				</ul>
+			</section>
+		</div>
+		
+		<div class="shop_status_container">
+			<h1 class="shop_status_header">
+				<span>食品监督安全公示</span>
+				<span class="shop_identified_certificates">企业认证详情&gt;</span>
+			</h1>
+			
+			<section class="shop_status_detail">
+				<img src="../../assets/xiaolian.png">
+				<section>
+					<p>监督检查结果：<span class="shop_status_text">良好</span></p>
+					<p>检查日期:</p>
+				</section>
+			</section>
+		</div>
+		
+		<div class="shop_info_detail">
+			<h1 class="shop_status_header">商家信息</h1>
+			<div>
+				<section>效果演示</section>
+				<section>地址：广东省广州市越秀区中山五路219号华联购物中心F1</section>
+				<section>营业时间：[8:30/20:30]</section>
+				<section style="display: flex; justify-content: space-between;">营业执照<span>&gt;</span></section>
+				<section style="display: flex; justify-content: space-between;">餐饮服务许可证<span>&gt;</span></section>
+			</div>
+		</div>
+		
+		<div class="license_info">
+			<img src='//elm.cangdu.org/img/167543e555722785.jpeg'>
+		</div>
+	</div>
+</template>
+
+<script>
+	export default{
+	}
+</script>
+
+<style>
+	.shop_detail_container{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 16;
+		
+		background: #f5f5f5;
+	}
+	
+	.shop_detail_header{
+		position: fixed;
+		
+		text-align: center;
+		
+		width: 100%;
+		height: 4rem;
+		
+		background: #3190E8;
+		color: #FFFFFF;
+	}
+	
+	.shop_detail_header>span{
+		position: absolute;
+		top: 0.6rem;
+		left: 0.5rem;
+		
+		font-size: 1.8rem;
+	}
+	
+	.shop_detail_header>h1{
+		font-size: 1.5rem;
+		
+		line-height: 4rem;
+	}
+	
+	.shop_activities_properties_container{
+		margin-top: 4rem;
+		
+		background: #FFFFFF;
+	}
+	
+	.shop_status_header{
+		position: relative;
+		
+		padding: 0.6rem 1rem;
+		border-bottom: 0.03rem solid #ECECEC;
+		
+		font-size: 1.5rem;
+		font-weight: normal;
+	}
+	
+	.shop_activities_properties{
+		margin-bottom: 1rem;
+		padding: 1rem;
+	}
+	
+	.shop_activities_properties ul li{
+		font-size: 1.05rem;
+		color: #666;
+		
+		margin-bottom: 1rem;
+	}
+	
+	.shop_activities_properties ul li span:first-child{
+		margin-right: 1rem;
+		padding: 0.06rem 0.2rem;
+		border: 0.025rem;
+		border-radius: 8%;
+		
+		background: rgb(153, 153, 153);
+		
+		font-size: 0.8rem;
+		color: #FFFFFF;
+	}
+	
+	.shop_status_container{
+		margin-bottom: 1rem;
+		
+		background: #FFFFFF;
+	}
+	
+	.shop_status_detail{
+		display: flex;
+		
+		padding: 1rem;
+	}
+	
+	.shop_identified_certificates{
+		position: absolute;
+		right: 0;
+		top: 0.6rem;
+		
+		font-size: 1.4rem;
+		color: #bbb;
+	}
+	
+	.shop_status_detail>img{
+		width: 4.5rem;
+		height: 4.5rem;
+		
+		margin-right: 2rem;
+	}
+	
+	.shop_status_detail>section>p{
+		margin-top: 0.5rem;
+		
+		font-size: 1.1rem;
+		color: #666;
+	}
+	
+	.shop_info_detail{
+		background: #fff;
+	}
+	
+	.shop_info_detail>div>section{
+		border-bottom: 0.025rem solid #ECECEC;
+		padding: 1.5rem;
+		
+		font-size: 1.2rem;
+		color: #666;
+	}
+</style>
