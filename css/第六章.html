@@ -1,0 +1,331 @@
+文本属性
+
+
+缩进和水平对齐
+
+缩进文本
+属性：text-indent
+值： 长度 百分比 inherit
+初始值: 0
+应用于： 块级元素
+继承性： 有
+百分数： 相对于包含块的宽度
+计算值： 对于百分数值，要根据指定确定；对于长度值，则为绝对长度
+长度也可以是负值
+
+p {text-indent: 3em;}
+如果首行有一个图像，也会随该行的其他文本移动
+
+负值
+
+p {text-indent: -4em;}
+要当心，前面的字可能会超出浏览器窗口的左边界，为了避免出现这种显示问题，建议再设置一个外边距或一些内边距：
+p {text-indent: -4em; padding-left: 4em ;} 
+
+text-indent 可以使用所有长度单位(包括百分数值)。
+百分数要相对于缩进元素父元素的宽度
+
+<div>
+	<p>会缩进400*10%=40px</p>
+</div>
+
+div { width: 400px;}
+p { text-indent:10%;}
+
+
+
+这个属性可以继承
+div#outer { width: 500px;}
+div#inner { text-indent: 10%;}
+p { width:200px;}
+
+<div id="outer">
+	<div id="inner">缩进500*10%=50px
+	<p>
+		宽度200px,缩进50px(因为是inner继承给它的)
+	</p>
+	</div>
+</div>
+
+
+
+
+水平对齐
+属性：text-align
+值：left center right justify inherit
+初始值：用户代理特定的值，还可能取决于书写方向
+应用于：块内元素
+继承性：有
+计算值：根据指定确定
+
+text-align:center 与 <CENTER>元素作用一样，但实际上并不相同
+<CENTER>不仅影响文本，还会把整个元素居中
+text-align不会控制元素的对齐，而只影响其内部内容
+
+justify：(两端对齐文本)使文本行左右两端都放在父元素的内边界上，然后调节单词和字母间的间隔，使各行的长度恰好相等
+要由用户代理来确定两端对齐文本如何拉伸
+
+
+
+
+垂直对齐
+行高
+属性:line-height
+值: 长度 百分比 数字 normal inherit
+初始值：normal
+应用于：所有元素
+继承性：有
+百分数：相对于元素的字体大小
+计算值：对于长度和百分数值是绝对数值
+
+应用到块级元素时，line-height定义了元素中文本基线之间的最小距离。
+
+构造文本行
+文本行中的每个元素都会生成一个内容区，由字体大小确定。
+这个内容区生成一个行内框(inline box)如果不存在其他因素，这个行内框就=该元素的内容区
+由line-height产生的行间距就是增加或减少各行内框高度的因素之一。
+
+指定line-height值
+如果使用默认值normal 用户代理计算行间的垂直空间 ，通常是字体大小的1.2倍
+这使得行框要高于给定元素的font-size值
+
+大多数值都是简单的长度度量(例如：18px或2em)
+em、ex和百分数值都相对于元素的font-size值计算.
+
+行高和继承
+line-height值从父元素继承时，要从父元素计算
+<div>
+	<p>font-size:18px 但 line-height:10px,会导致上下字体小部分重叠</p>
+</div>
+
+body { font-size:10px;}
+div { line-height: 1em;} 行高计算:10px*1em=10px
+p { font-size: 18px} 行高计算继承得10px
+
+解决方法：指定一个数，由它设置缩放因子
+body { font-size:10px;}
+div { line-height: 1.5;} 缩放因子将是继承值而不是计算值
+p { font-size: 18px} 行高：18px*1.5=27px
+
+
+假设一个段落默认font-size是12pt
+p { line-height: 16pt;}
+由于12点文本"固有"行高是12点，前面规则将在段落中各行文本外围增加额外的4点空间。平均分为两部分，一半放在各行上面，一半放各行下面。
+现在基线间则有16点空间，这是分配额外空间的间接结果。
+如果指定值inherit，元素则会使用其父元素的计算值，跟自然继承没什么不同，不过特殊性和叠层解决方案不同。
+
+
+
+
+
+
+垂直对齐文本
+属性：vertical-align
+值： baseline sub super buttom text-buttom middle top text-top
+初始值：baseline
+应用于： 行内元素和表单元格
+继承值：无
+百分数：相对于元素的line-height值
+计算值：对于百分数和长度值，为绝对长度；否则，根据指定确定
+应用到表单元格时，只能识别baseline top middle 和 bottom 等值
+
+
+基线对齐
+vertical-align: baseline 要求一个元素的基线与其余元素的基线对齐
+如果一个垂直对齐元素没有基线(一个图像或表单输入元素或时其他替换元素)
+那么该元素的低端与其父元素的基线对齐
+
+上标和下标
+vertical-align: sub 声明会使一个元素变成下标，意味着其基线(替换元素则时其底端)
+相对于父元素的基线降低，规范没有定义元素降低的距离，所以可能会随着用户代理的不同而不同
+
+super刚好与sub相反...元素的基线(替换元素则时其底端)
+相对于父元素的基线升高，升高距离由用户代理定
+
+sub和super不会改变元素的字体大小，相反下标和上标元素的所有文本默认地与父元素中的文本大小相同。
+
+
+底端对齐
+vertical-align: bottom 将元素行内框的低端与行框的低端对齐。
+
+vertical-align: text-bottom 是指行内文本的底端。替换元素或其他非文本元素会忽略这个值
+要对齐的元素的行内框底端与一个默认文本框的底端对齐，这个默认文本框的底端由父元素的font-size得到
+
+
+顶端对齐
+vertical-align: top 刚好与bottom相反
+类似地，text-top 与 text-bottom相反
+
+
+居中对齐
+vertical-align: middle 它往往应用于图像。
+middle会把行内元素框的重点与父元素基线上方0.5ex处的一个点对齐，这里的1ex相对于父元素的font-size定义
+
+
+百分数
+使用百分数不能模仿图像的align="middle"对齐
+如果为vertical-align设置一个百分数
+会把元素的基线(或替换元素的底边)相对于父元素的基线升高或降低指定的量
+(你指定的百分数要计算为该元素的line-height的百分数，而不是父元素的line-height)
+正百分数值会使元素升高，负值会使其降低
+
+
+长度对齐
+vertical-align: 数值
+他把一个元素升高或降低指定的距离
+
+
+
+
+
+字间隔和字母间隔
+
+字间隔
+属性:word-spacing
+值:长度 normal inherit
+初始值: normal
+应用于：所有元素
+继承性：有
+计算值：对于normal,为绝对长度0；否则，也是绝对长度
+
+提供一个正长度值，那么字之间的间隔就会增加；负值，会把字拉近
+
+
+
+字母间隔
+属性：letter-spacing
+值：长度 normal inherit
+应用于：所有元素
+继承性：有
+计算值：对于长度值为绝对长度；否则为normal
+
+跟字间隔属性差不多
+
+
+
+
+间隔和对齐
+省略
+
+
+
+
+
+文本转换
+属性：text-transform
+值：uppercase lowercase capitalize none inherit
+初始值：none
+应用于: 所有元素
+继承性：有
+计算值：根据指定确定
+
+很简单 大写 小写 每个单词首字大写 ....
+对于heading-one 类似这些 由用户代理定是否 Heading-one 还是 Heading-One
+
+
+
+
+
+文本装饰
+
+属性：text-decoration
+值：none [ underline || overline || line-through || blink] inherit
+初始值：none
+应用于：所有元素
+继承性：无
+计算值：根据指定确定
+
+underline会对元素加下划线，就像HTML中的U元素一样
+overline 会在文本的顶端加一个上划线
+line-through 会在文本中间画一个贯穿线 等价于HTML中的S和strike元素
+blink 会让文本闪烁
+none值 会关闭应用到一个元素上的所有装饰
+
+注意
+h2.stricken { text-decoration: line-through;}
+h2 { txt-decoration: underline overline;}
+所有class为stricken的h2元素都只有一个贯穿线装饰，而没有下划线和上划线
+因为text-decoration值会替换而不是累积起来
+
+
+
+
+
+怪异的装饰
+
+text-decoration不能继承
+但是
+p { text-decoration:underline ; color:black;}
+strong { color:gray;}
+
+<p>0.0<strong>.....</strong></p>
+
+依然会有一条下划线在strong文本下，应该说是下划线经过了strong文本
+有些用户代理会，有些不会，看情况
+
+
+
+
+
+文本阴影
+属性: text-shadow
+值：none [ 颜色 || 长度 长度 长度 ]* inherit
+初始值: none
+应用于：所有元素
+继承性：无
+
+可以定义多个阴影，每个阴影都由一个颜色和3个长度值来定义
+前两个长度值确定阴影与文本的偏移距离，第三个长度值可选 ，定义了阴影的"模糊半径"
+
+
+
+处理空白符
+属性：white-space
+值：normal nowrap pre pre-wrap pre-line inherit
+初始值：normal
+应用于：所有元素
+继承性：无
+计算值：根据指定确定
+
+通常浏览器会将很多空格、tab字符、换行字符(回车)变为一个空格
+
+可以 p{ white-space:normal;} 设置这种默认行为
+
+如果white-space值为pre，想HTML中的pre元素一样，不会忽略空格，甚至回车
+
+相反 是 nowrap值 它会防止元素中的文本换行 除非使用了一个br元素
+类似与HTML4 中的td nowrap元素，但white-space值可以应用到任何元素
+
+
+如果 white-space值为pre-wrap 那么该元素的文本会保留空白符序列，但是文本行会正常地换行，分割符也会保留
+pre-line 刚好相反 会合并空白符，但一样会保留换行符
+
+
+
+
+文本方向
+属性：direction
+值： ltr rtl inherit
+初始值：ltr
+应用于：所有元素
+继承值：有
+计算值: 根据指定确定
+
+ltr 是left to right ....
+
+direction属性影响块级元素中文本的书写方向、表中列布局的方向、内容水平填充其元素框的方向，以及两端对齐元素中最后一行的位置。
+对于行内元素，只有当unicode-bidi属性设置为embed或bidi-override时才会应用direction属性
+
+
+
+
+属性：unicode-bidi
+值：normal embed bidi-override inherit
+应用于：所有元素
+继承性：无
+计算值：根据指定确定
+
+省略
+
+
+

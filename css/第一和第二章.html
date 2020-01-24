@@ -1,0 +1,328 @@
+html中：块级元素不能继承行内元素 => 块级元素不能嵌套在行内元素里面
+但css可以:
+p {display:inline} em {display:block}
+display默认值是 inline
+
+
+
+引用css 必须放在head元素内
+<link rel="stylesheet" type="text/css" href="sheet1.css" media="all" />
+<link rel="alternate stylesheet" .../>
+外部样式表 直接就是 
+h1{ color:red;} 
+h2 {.....}
+
+扩展名为css
+
+rel属性的值还可以是alternate stylesheet 提供候选样式表
+
+如果没有为样式表制定title，那么它将作为一个永久样式表，始终用于文档的显示。
+
+
+
+用style元素包含样式表，在文档中单独出现
+<style type="text/css"></style> 
+始终要<style type="text/css">开头 还可以为style元素制定一个media属性
+
+@import指令
+类似link，只不过它是要放在style标签里面，而且还要放在前面
+<style type="text/css"> @import url(style.css);
+h1 { color:red; }
+</style>
+可以有多个@import ， 每个样式表都会加载使用
+可以列出应用此样式的媒体 @import url(...) all;
+跟link一样，相对路径和绝对路径都可以用
+
+向后可访问性：（有空再了解)
+让较老的浏览器也能访问文档
+
+
+
+css注释 /* */可以多行 可以单行 不可以嵌套
+
+内联样式：直接在html的style属性 设置一个内联样式
+<p style="color:grey;">...</p>
+
+
+
+选择器：
+元素选择器:
+html {...}
+body {...}
+p1 {...}
+
+多个关键字用空格隔开
+p { font: medium Helvetical;}
+css的font属性中，只有一种情况可以使用斜线/来分割两个特定的关键字
+h2 { font: large/150% sans-serif;}
+
+选择器分组:
+
+用逗号隔开两个选择器
+h2 , p { color: grey ;}
+
+通配选择器:
+让一个文档每个元素都为红色
+* { color:red; }
+
+
+类选择器
+<p class="warning">...</p>
+<p>...<span class="warning">...</span>...</p>
+
+*.warning { font-weight: bold; }
+所有元素中class属性是warning的元素
+
+p.warning { font-weight: bold; }
+只有p元素且class属性是warning的元素,这里span元素不会匹配
+
+p.warning { font-weight: bold; }
+span.warning { font-style: italic; }
+两种不同的样式
+
+.warning { font-weight: italic; }
+span.warning {font-weight: bold; }
+所有class属性的元素都是斜体,除了class属性为warning的span元素,它是粗体也是斜体
+
+
+多类选择器
+<p class=”urgent warning">...</p>
+<p><span class="warning">...</span>...</p>
+写成warning urgent 也行 顺序没关系
+
+.warning { font-weight: bold;}
+.urgent { font-style: italic;}
+.warning.urgent { background: silver;}  class同时包含warning 和 urgent 的元素才有效
+
+class="urgent warning" 的p元素 是斜体，被加粗，且背景是银色
+class="warning" 的span元素 仅仅被加粗
+
+例如 如果这样写: p.warning.help { background:red; }
+只匹配class包含warning 和 help 的p元素 ，上面p元素只包含urgent 不包含 help ，不被匹配
+如果 p元素是这样 <p class="urgent warning help">...</p>  是可以匹配的
+
+
+
+id选择器
+前面加一个#号
+*#fitst-para { font-weight:bold;}
+
+id属性中包含值 first-para 的所有元素显示为粗体文本
+
+跟类选择器一样，id选择器也可以忽略通配选择器
+#lead-para {...}
+
+记得区分大小写
+
+
+
+属性选择器
+<h1 class="a">a</h1>
+<h1 class="b">b</h1>
+<h1 class="c">c</h1>
+
+h1[class] { color: silver;}
+
+所有包含class属性（值不限）的h1元素都匹配
+
+<h2 >a</h1>
+<h2 moons="b">b</h1> √
+<h2 moons="c">c</h1> √
+
+h2[moons] { font-weight:bold;}
+所有包含moons属性（值不限）的h2元素都匹配
+
+想把所有包含title属性的元素变为粗体
+*[title] { font-weight: bold;}
+
+
+<a href="..." title="..">w3</a> √
+<a href="...">ww</a>
+<a title=".....">aa</a>
+
+想把同时有href 和 title属性的 html超链接文本设置为粗体
+a[href][title] {font-weight:bold;}
+
+
+
+根据具体属性值选择
+
+a[href="http://www.baidu.com"] {font-weight: bold;}
+a元素含有href属性且等于http://www.baidu.com才匹配,
+
+
+也可以多个属性-值 选择器来选择
+
+a[href="http://www.baidu.com"][tille="w3c"] { font-size:200%;}
+a元素含有href属性等于http://www.baidu.com ,且含有tille属性等于"w3c" 才匹配
+必须与属性值完全匹配，有一个空格也不行
+
+
+根据部分属性值选择
+如果想选择class属性中包含warning的元素，可以用一个属性选择器
+例如: <p class="urgent warning">....</p>
+
+p[class~="warning"] { font-weight: bold;}
+注意这里有个波浪号~
+
+
+子串匹配属性选择器
+
+[foo^="bar"] 选择foo属性值以"bar"开头的所有元素
+[foo$="bar"] 选择foo属性值以"bar"结尾的所有元素
+[foo*="bar"] 选择foo属性值中包含子串"bar"的所有元素
+
+特定属性选择器
+
+
+<h1 lang="en">hello!<h1> √
+<p lang="en-us">Greetings!</p> √
+<div lang="en-au">G'day!</div> √
+<p lang="fr">Bonjour!</p> 
+<h4 lang="cy-en">Jrooana!</h4>
+
+*[lang|="en"] { color: white; }
+这个规则会选择lang属性等于en或者以en-开头的所有元素
+
+后代选择器
+
+h1 em { color: gray;}
+把h1元素后代的任何em元素的文本变成灰色
+
+ 还有
+ ul ol ul em { color:gray; }
+ 会把ul里的ol里的ul里的em元素的文本设置为灰色
+ 
+blockquote b, p b { color: gray ;}
+作为段落或块引用后代的b 元素中的文本会变灰色
+
+
+
+选择子元素
+<h1>This is <strong>very</strong> important.</h1> √
+<h1>This is <em> really <strong>very</strong></em> important.</h1>
+
+h1 > strong { color:red; }
+选择h1的子元素的所有strong元素
+
+
+选择相邻兄弟元素
+
+h1 + p { margin-top:0;}
+选择紧接在一个h1元素后出现的段落p, h1要与 p 元素有共同的父元素
+
+<div>
+	<ol>
+		<li></li>
+		<li></li> √
+		<li></li> √
+	</ol>
+	<ul>
+		<li></li>
+		<li></li> √
+		<li></li> √
+	</ul>
+</div>
+
+如果写作li+li{ font-weight:bold; }
+只会把各列表中的第二个和第三个列表项变成粗体。
+
+可以用ol+ul {...} 选择第二个元素 ， 但是无法选择第一个元素，
+要想与 ul+ol {...}匹配，有序列表必须紧跟在无序列表后面 注意ol是orderlist有序列表 ， ul是unorderlist 无序列表
+
+
+相邻兄弟结合符 还可结合其他符
+html > body table + ul {margin-top:1.5em;}
+
+解释为：选择紧接在一个table元素后出现的所有兄弟ul元素
+
+
+
+伪类和伪元素
+
+链接伪类
+:link 提示作为超链接（有一个href属性）并指向一个未访问地址的所有锚(a元素)
+:visited 指示作为已访问地址超链接的所有锚
+
+a:link { color:blue }
+a:visited { color:red }
+
+动态伪类
+:focus 提示当前拥有输入焦点的元素，可以接收键盘输入或者能以某种方式激活的元素
+:hover 提示鼠标指针停留在哪个元素上
+:active 提示被用户输入激活的元素，例如用户鼠标在超链接上点击鼠标，会激活这个超链接
+
+一个例子 input:focus { background:silver ; font-weight:bold }
+
+伪类的顺序很重要 通常是 link-visited-focus-hover-active
+
+
+
+选择第一个子元素
+:first-child
+
+<div>
+<p>The</p> √ p
+<ul>
+<li></li> √ li
+<li>0.0<strong>xixi</strong></li> √ 这里指的是strong元素匹配到了
+<li></li> 
+</ul>
+<p>...<em>0.0</em></p> √em-这里指的是em元素匹配到了
+</div>
+ 
+p:first-child {font-weight:bold} p元素是它的父元素的第一个子元素就能匹配到 <p>The</p> 可以匹配到
+li:first-child {text-transform:uppercase}
+em:fitst-child {...} 
+strong:first-child {...}
+
+
+
+根据语言选择
+:lang()伪类
+
+要把所有法语元素变为斜体
+*:lang(fr) {font-style:italic;}
+
+
+结合伪类
+例如 a:link:hover {color:red;} 鼠标放在未访问链接上时，链接变红色
+顺序不重要 协程 a:hover:link 也可以
+
+a:link:visited 互斥，没意义 不要放上
+
+
+伪元素选择器
+
+设置首字母样式
+
+p:first-letter {color:red;}
+所有p元素的第一个字母变成红色
+
+用户代理动态会自动构造<p:first-letter></p:first-letter>这个伪元素
+例如<p><p:first-letter>T</p:first-letter>his is an p element</p>
+
+
+设置第一行的样式
+:first-line
+
+p:first-line { color:purple; }
+p元素第一行是紫色字
+
+
+所有伪元素都必须放在出现该伪元素的选择器的最后
+例如p:first-line em 就是不合法的
+
+设置之前和之后元素的样式
+
+想设置一种排版效果，在每个h2元素前加一对银色中括号
+h2:before { content: "}}" ; color:silver; }
+
+要在一个元素后面插入内容，可以用伪元素:after
+body:after {content:" The End.";}
+在文档的最后用一个适当的结束语结束
+
+
+用户代理useragent(UA) 目前几乎所有人都采用网络浏览器作为用户代理
+
+

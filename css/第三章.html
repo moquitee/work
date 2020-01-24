@@ -1,0 +1,166 @@
+特殊性
+
+选择器的特殊性由选择器本身的组件确定
+特殊性表述为4个部分 如0,0,0,0
+
+ID： 0,1,0,0
+类、属性选择、伪类 0,0,1,0
+给定的元素和伪元素 0,0,0,1
+结合符和通配选择器对特殊性没有贡献 为0,0,0,0
+
+h1 { color:red;}    0,0,0,1
+body h1 {color;green;} 0,0,0,2 winner
+
+h2.grape {color:purple;} 0,0,1,1 winner
+h2 { color:silver;} 0,0,0,1
+
+html > body table tr[id="totals"] td ul > li { color:maroon;} 0,0,1,7
+li#answer {color:navy;} 0,1,0,1 winner 
+
+实际上0,0,1,0 比 0,0,0,13要高
+
+
+
+声明和特殊性
+h1 { color:silver; background:black; }
+用户代理会将其“解组”
+h1 { color:silver; }
+h1 { background:black; }
+
+还有
+h1,h2.section { color:silver ; background:black;}
+用户代理会将其处理为
+h1 { color:silver; }
+h1 { background:black; }
+h2.section { color:silver; }
+h2.section { background:black; }
+
+
+例子：
+
+<h1>Greetings!</h1> 
+<p class="aside">0.0</p> 字体颜色：第一个元素选择器:黑色(×)和类选择器：黑色(√) 背景颜色：银色 字体风格：斜体
+<p>0.0</p>  灰色字体，白色背景，普通字体
+<h1>0.0</h1>  
+<p>0.0</p> 字体颜色：第一个元素选择器：黑色(√) 和 第二个元素选择器：灰色(×) 背景颜色： 白色 字体风格：斜体(√) 和 普通(×)
+<p class="aside"></p> 字体颜色： 灰色(×) 和 黑色(√)  背景颜色：白色(×) 和 银色(√) 字体风格：普通
+
+h1 + p {color:black;font-style:italic;} 0,0,0,2
+p { color:gray ; background:white; font-style:normal;} 0,0,0,1
+*.aside { color:black ; background:silver;} 0,0,1,0
+
+
+ID和属性选择器的特殊性
+
+#meadow { color: green; } 0,1,0,0 winner
+*[id="meadow"] {color:red;} 0,0,1,0
+
+
+内联样式的特殊性
+内联样式特殊性是 1,0,0,0
+比其他声明都要高
+h1 { color:red;} 0,0,0,1
+<h1 style="color:green;">The meadow</h1> 1,0,0,0 winner
+
+
+
+重要性:
+超过了其他所有声明，称为重要声明
+插入 !important  来标志 
+
+p.dark { color: #333 !important ; background: white ;}
+
+两个声明都标志为重要
+p.dark { color: #333 !important ; background: white !important ;}
+
+要正确放置
+如果一个属性值包含多个关键词
+p.light { color:yellow ; font:smaller times, serif !important;}
+
+重要声明总是胜出
+
+
+
+
+继承
+样式不仅应用到制定的元素，还会应用到它的后代元素
+h1 {color:grey;}
+<h1>Meerkat <em>central</em></h1>
+不仅h1文本变灰色，练em文本也是灰色，因为em元素继承了这个color值
+
+继承对无序列表ul也适用
+
+
+有些属性不能继承
+例如属性：border 边框
+
+继承值没有特殊性比0特殊性还不如
+<h1 id="tilte">Meerkat <em>Central </em></h1>
+<p> welcome </p>
+
+* {color:gray;}
+h1#title { color:black;}
+
+这里em元素是被继承颜色黑色，但是继承是没有特殊性的
+而通配选择器 特殊性为0,0,0,0 所以最终em元素为灰色
+
+例子：
+如果:
+toolbar里有很多超链接
+#toolbar { color: white; background: black; } 超链接是继承的，所以没有特殊性
+这样超链接是蓝色
+因为浏览器的样式表可能包含这个： a:link {color:blue;} 0,0,0,2
+而超链接样式占上风
+
+解决方法：
+
+#toolbar { color: white; background: black; }
+#toolbar a:link { color:white; }
+
+
+
+叠层
+h1 { color:red; }
+h1 { color:blue; }
+哪个会占上风？
+
+规则
+1.每个规则都包含一个给定元素匹配的选择器
+2.有!important强于其他样式 创作人员样式>读者样式>用户代理样式  但是有!important标志的读者样式要强于其他样式
+3.按特殊性排序
+4.按顺序排序
+
+声明权重： 由大到小
+1. 读者的重要声明
+2. 创作人员的重要声明
+3. 创作人员的正常声明
+4. 读者的正常声明
+5. 用户代理声明
+
+
+按顺序排序
+如果两个规则的权重，来源和特殊性完全相同，那么在样式表中后出现的一个会胜出
+h1 { color:red; }
+h1 { color:blue; }
+因为blue的规则在样式表中较后出现
+
+p em { color: purple;}	从外部import进来的样式表
+p em { color: gray;}	文档中的样式表
+
+这种情况下，第二个会胜过导入的
+
+正式由于这种按顺序排序，所以才有了通常推荐的链接样式顺序。
+一般按link-visited-hover-active 的顺序声明链接样式
+它们有相同的权重、来源和特殊性 因此与元素匹配的最后一个选择器才会胜出
+
+一个变种：
+:link{}
+:hover{}
+:visited{}
+:active{}
+只有未访问过的链接才会有悬停样式
+
+还有一些例子,这里省略一下
+
+
+

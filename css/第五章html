@@ -1,0 +1,259 @@
+字体系列 font-family
+值:各种字体 inherit
+
+css定义了:
+特定字体系列( Times、Verdana、Helvetica或Arial)
+5种通用字体系列 Serif、Sans-serif、Monospace、Cursive、Fantasy   字体
+
+
+通用字体系列
+可以使用font-family 在文档中采用上述任何字体系列
+
+如果希望文档使用一种sans-serif字体 但是并不关心具体是哪一种字体：
+body { font-family: sans-serif;}
+用户代理就会从sans-serif字体系列选择一个字体(如Helvetica);
+并将其应用到body元素及其将要继承的元素
+
+
+指定字体系列
+一样
+h1 { font-family: Georgia ;}
+
+假设用户代理上Georgia字体不可用，用户代理会使用默认字体来显示h1元素
+
+可以这样：
+h1 { font-family: Georgia , serif;}
+如果读者没有安装Georgia字体，但是安装了Times字体，用户代理就可能对h1元素使用Times
+
+
+使用引号
+如果一个字体名中有一个或多个空格(如New York)，或者包含#或$之类的符号，需要在font-family声明中加引号
+h2 { font-family: fantasy , 'Karrank%' ; }
+唯一必须加引号的是所接受关键字匹配的字体名
+如果需要一种名为"cursive"的字体，必须加引号
+
+如果用引号将一个通用字体名引起，用户代理会认为你需要一个与此同名的特定字体，而不是一个通用字体系列
+
+
+
+
+
+字体加粗 font-weight
+值: normal bold bolder lighter 100的倍数~900 inherit
+初始值:normal
+
+b { font-weight:bold; }
+
+加粗如何起作用
+如果一个字体内置了100~900的100的倍数值梯度，其中包含9个值的加粗级别
+那么这些数字就直接映射到预定义的级别，100最细，900最粗的字体变形
+400定义为等价于normal
+700对应于bold
+如果一个Medium的变形标为Normal、Regular、Roman或Book 就会为之指定400
+而标为Medium的变形会指定为500
+不过如果一个标为Meidum的变形是唯一可用的变形，它不会指定为500而是400(？？？？？？？？？？)
+
+如果给定的字体系列中定义的加粗度少于9种，用户代理还必须多做一些工作，填补"空白"
+如果未指定500的加粗度，其字体加粗与400的相应加粗相同。
+如果未指定300的加粗度，则为之指定下一个比 400 更细的变形。如果没有可用的较细变形，为 300 指定的变形等同于400的相应变形。在这种情况下，通常是 Normal 或 Medium 。这种方法同样适用于 200 和100。
+如果未指定600的加粗度，会为之指定下一个比 400 更粗的变形。如果没有可川的较粗变形，为 600 指定的变形叨 11 等同 f 500 的相应变形。这种方法同样适用于700 、800 和 900 。
+
+font-weight 是可以继承的
+p.one {font-weight:bold;}
+它的所有子元素都会继承这个加粗度
+
+
+让字体更粗
+如果将一个元素的加粗设置为bolder，用户代理首先必须确定从父元素继承的font-weight值
+然后选择一个数，它应比所继承值更粗，而且在满足该条件的所有数中，要选择最小的一个数
+
+p { font-weight:normal;}
+p em { font-weight: bolder;} 比normal更粗，会从400跳到700 是bold
+
+h1 { font-weight:bold;}
+h1 b { font-weight:bolder;} 比bold更粗 会从700跳到800 
+由于800和700被指定为同一个字体，所以正常的h1文本和粗体h1文本之间看上去没区别，不过加粗确实不同
+
+div { font-weight: 100;} 假设"light"变形 存在
+div strong { font-weight:bolder;} 100是最细，比它粗 会从100跳到400 是normal
+
+如果字体中只有Regular 和 Bold会怎么样
+p { font-weight:100;} 会被看做normal
+p span { font-weight:bolder;} 从100跳到700 是bold
+
+/* assume only two faces for this exanple: • Regular' and • Bold， 
+p {font-weight: 100；) /* looks the same as 'normal' text * /
+p span {font-weight： 400；} /* so does this */
+strong {font-weight： bolder；} /* even bolder than its parent */
+strong b {font-weight: bolder；) /*bolder still */
+
+<P>
+This paragraph contains elements of increasing weight： there is a 
+<span>span element that contains a <strong>strongly emphasized 
+element and a <b>boldface element</b></strong></span>.
+</p>
+
+结果<p>100 <span> 400 <strong> 700 <b> 800 </b></strong></span></p>
+实际上100与400显示的字体一样：regular    700和800一样:bold
+
+如果再在b元素插入一个strong元素,得到
+<p>100 <span> 400 <strong> 700 <b> 800 <strong> 900 </strong></b></strong></span></p>
+
+如果再有b元素插入最内层strong元素中，加粗度也是900 因为900最高了
+
+
+让字体更细
+font-weight:lighter
+从900-下一个更细的字体，或400,再下一级300 再下一级200 再下一级100
+差不多
+
+
+
+
+
+
+字体大小
+属性:font-size
+值：xx-small  x-small small medium large x-large xx-large smaller larger 长度 百分比 inherit
+初始值： medium 
+会继承
+百分数： 按照父元素的字体大小来计算
+计算值： 绝对长度
+
+font-size属性 与 实际字体大小的具体关系由字体的设计者来确定
+这种关系设置为字体本身中的一个em方框 
+因此，font-size的作用是为给定字体的em框提供一个大小，不能保证实际显示的字符就是这种大小
+
+绝对大小
+
+font-size有7个绝对大小值： xx-small  x-small small medium large x-large xx-large 
+没有明确地定义，而是相对地来定义
+两个绝对大小之间的差别(缩放因子)应当是向上1.5向下0.66
+因此如果medium等于10px，那么large就应当等于15px。
+对于不同的用户代理缩放因子可能不同。
+
+
+相对大小
+(有点懵逼，先省略)
+
+百分数和大小
+就是相对于父元素的百分比，允许对计算的字体有更细的控制
+假设两个段落有相同的父元素
+p.one {font-size: 166%;}
+p.two {font-size: 1.6em;}
+
+有时，CSS定义长度值em等价于百分数值，即确定字体大小时1em等于100%
+
+
+字体大小和继承
+
+css中的font-size可以继承，不过继承的是计算值而不是百分数
+
+<p>This paragraph contains both<em>emphasis and <strong>strong 
+emphasis</strong></em>, both of which are larger than the paragraph text.</p>
+
+p {font-size:12px;}
+em {font-size:120%;}
+strong {font-size:135%;}
+
+<p> 12px <em>14.4px <strong> 19.44px </strong></em> 12px </p>
+
+计算:strong元素的大小值：
+em: 12px*120=14.4px
+strong: 14.4*135%=19.44px
+
+如果用户代理对数据进行取整 结果得 em:14px   strong:19px(14px*135%)
+
+
+使用长度单位
+可以使用任何长度值来设置font-size
+
+
+
+
+风格和变形：
+字体的风格
+属性：font-style
+值: italic oblique normal inherit
+初始值: normal
+可以继承
+
+
+font-style的默认值是normal,是指"竖直"的文本。。
+italic是一种单独的字体风格，对每个字母的结构一些小改动，来反映变化的外观。
+而oblique不同，它是正常竖直文本的一个倾斜版本
+标为Italic、Cursive和Kursiv的字体总是映射到italic关键字
+而Oblique、Slanted和Incline字体总是映射到oblique关键字
+
+
+
+
+字体变形
+属性: font-variant
+值：small-caps normal inherit
+初始值：normal
+可以继承
+
+small-caps是一种字体，采用不同大小的大写字母
+只要文本源出现大写字母，会显示一个更大的大写字母
+而且只要文本源中出现一个小写字母，就会显示一个小型的大写字母
+与text-transform: uppercase 很类似 ，唯一的区别是在此大写字母的大小不同
+
+
+
+
+
+
+font属性
+涵盖所有其他字体属性(以及少数其他内容)的一个简写属性
+[[ 字体风格 字体变形 字体加粗 ] 字体大小 [行高] 字体系列 ] caption icon menu message-box small-caption status-bar inherit
+初始值：根据单个属性
+可以继承
+百分数： 字体大小相对于父元素计算  line-height相对于元素的字体大小来计算
+计算值： 见单个属性。。。
+
+例如：
+h1 {font:italic 900 small-caps 30px Verdana, Helvetica, Ariai, sans-serif;} 
+h2 {font:bold normal italic 24px Verdana, Helvetica, Ariai, sans-serif;}
+
+字体风格 字体加粗 和 字体变形 这三个的值顺序可以任意 如果其中某个值为normal 可以忽略不写
+
+字体大小 和 字体系列 不仅要按顺序写 还必须有这两个值
+
+
+增加行高
+line-height 
+行高是文本属性，是完全是可选的 总是在字体大小之后，而且字体大小和行高之间要用/分隔
+
+
+适当使用简写
+h1, h2, h3 {font: italic small-caps 250% sans-serif;} 
+h2 (font: 200% sans-serif;} 
+h3 {font-size: 150%;}
+<h1>This is an h1 element</h1> 
+<h2>This is an h2 element</h2> 
+<h3>This is an h3 element</h3>
+
+
+使用系统字体
+
+caption 用于有标题的控件，如按钮
+
+icon 用于对图标加标签
+
+menu 用于菜单，即下拉菜单和菜单列表
+
+message-box 用于对话框
+
+small-caption 用于对小控件加标签
+
+status-bar  用于窗口状态条
+
+例如想把一个按钮的字体设置为与操作系统的按钮字体安全相同
+button { font: caption;}
+确保按钮字体与父元素字体大小相等
+button { font: caption; font-size: 1em;}
+
+
+字体匹配
+省略一下

@@ -1,0 +1,133 @@
+数字
+整数和实数都可以是正数或负数
+
+百分比
+
+颜色
+
+命名颜色： CSS定义17个颜色名 包含HTML4.01定义的16个颜色 外加一个橙色
+例如 white black silver navy purple
+大多数Web浏览器能识别多达140个颜色名 包括css定义的17个标准颜色
+
+用RGB指定颜色：
+1.函数式RGB颜色
+语法： rgb(color),其中color用一个百分数或者整数三元组表示
+百分数值在0%~100%范围内，整数范围为0~255
+
+用百分数记法分别制定白色和黑色，值指定为 rgb{100%,100%,100%} rgb(0%,0%,0%)
+用整数三元组记法：rgb(255,255,255) rgb(0,0,0) 注意是整数
+
+2.十六进制RGB颜色
+一般语法：#RRGGBB
+h1{color:#FF0000;}
+
+简写记法：三位变六位
+h1{color:#000} 相当于#000000
+#F00 相当于 #FF0000
+#6FA 相当于 #66FFAA
+
+Web安全颜色
+256色计算机系统上总能避免抖动的颜色
+可以表示为RGB值20%和51(相对应十六进制值为33)的倍数
+十六进制记法使用00,33,66,99,CC和FF的三元组都认为是Web安全的
+例如#669933
+
+
+长度单位
+可以是正数或负数
+所有长度单位后面都有一个单位
+除了0
+
+绝对长度单位
+英寸 in
+厘米 cm
+毫米 mm
+点 pt		一英寸是72点
+派卡 pc		一派卡是12点
+
+处理绝对长度
+在浏览器显示方面 em 百分数 甚至 像素 都比点好(原因是.....)
+
+
+相对长度单位
+em ex 和 px
+一个"em"定义为一种给定字体的font-size值
+如果一个元素的font-size为14像素 那对于该元素1em=14像素
+如果一个元素的font-size为18像素 那对于该元素1em=18像素
+
+例如
+h1 { font-size:24px;}
+h2 { font-size:18px;}
+p { font-size:12px;}
+h1,h2,p { margin-left: 1em;}
+small { font-size:0.8em;}
+
+这样他们的左边距随着font-size的不同而不同
+
+
+于此不同的是ex是指所用字体中小写x的高度
+如果有两个段落，其中文本的大小为24点，但是隔断使用了不同的字体，那么各段相对应的ex值可能不同、
+因为不同字体中x的高度可能不同
+
+em和ex的实际问题
+
+实际上，很多用户代理是取em的值，再取一半作为ex值
+因为大多数字体都没有内置ex高度，难以计算
+
+
+像素长度 
+非常适合用像素来度量图像大小，因为图像的高度和宽度本身就是像素数。
+
+像素理论：..........省略一下
+
+
+URL
+绝对URL 一般格式： url(protocol://server/pathname)
+不论这个URL放在那里，它都能正常工作
+
+相对URL 格式： url(pathname)
+如果图像与包含该URL的页面在同一个服务器上，这就能正常工作
+假设有一个位于http://www.waffles.org/syrup.html的页面 而且希望这个页面上出现图像waffle22.gif
+URL将是 pix/waffle22.gif
+把pix/waffle22.gif增加到http://www.waffles.org ，
+得到了http://www.waffles.org/pix/waffle22.gif
+
+而在css中，相对URL要相对于样式表本身，而不是改样式表的HTML文档。
+例如：在位于http://www.waffles.org/toppings/tips.html的HTML文档
+它有一个指向样式表 http://www.waffles.org/styles/basic.css的链接：
+<link rel="stylesheet" type="text/css" href="http://www.waffles.org/styles/basic.css">
+
+在文件basic.css中有一个@import语句指向另一个样式表：
+@import url(special/toppings.css);
+这个@import会导致浏览器查找位于http://www.waffles.org/toppings/special/toppings.css查找样式表
+正确可以写作 @import url(http://www.waffles.org/toppings/special/toppings.css); 
+注意 url 和开始括号之间不能有空格
+url () ×
+
+
+关键字
+像none,normal 这些
+
+inherit
+inherit是一个关键字，所有元素都有的一个属性
+
+#toolbar a {color:inherit;}
+这会让链接使用继承的color值，而不是用户代理的默认样式
+正常情况下，直接制定的样式总会优先于继承的样式，但通过inherit可以反过来
+
+
+角度值
+度 deg
+梯度 grad
+弧度 rad
+无论如何声明，这些值都会解释为0~360度范围的读数 负数值也一样
+
+时间值
+毫秒 ms
+秒 s
+
+频率值
+赫兹 Hz
+兆赫 MHz
+不能是负值 不区分大小写
+
