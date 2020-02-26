@@ -29,6 +29,17 @@
 					<section class="food" 
 					v-for="food in category_data[category_num].foods"
 					v-bind:key="food.item_id"
+					v-on:click="open_food_detail({
+						name:food.name,
+						image_path:food.image_path,
+						description:food.description,
+						rating:food.rating,
+						month_sales:food.month_sales,
+						specfoods:food.specfoods,
+						specfoods_minimun_price:get_the_smaller_price(food.specfoods),
+						rating_count:food.rating_count,
+						satisfy_rate:food.satisfy_rate,
+					})"
 					>
 						<ul class="food_activities">
 							<li class="food_activities_new"
@@ -57,7 +68,7 @@
 								<section v-if="food.specfoods.length <= 1">
 									<span class="food_order_quantities_minus"
 									v-if="get_valid_single_food_num(food.specfoods[0].food_id)"
-									v-on:click="reduce_order(food.specfoods[0].food_id,
+									v-on:click.stop="reduce_order(food.specfoods[0].food_id,
 									{ 
 										category_id : food.category_id,
 										food_name : food.name,
@@ -70,7 +81,7 @@
 									>-</span>
 									<span class="food_order_quantities" v-if="get_valid_single_food_num(food.specfoods[0].food_id)"> {{ get_valid_single_food_num(food.specfoods[0].food_id) }} </span>
 									<span class="food_order_quantities_plus"
-									v-on:click="add_order(food.specfoods[0].food_id,
+									v-on:click.stop="add_order(food.specfoods[0].food_id,
 									{ 
 										category_id : food.category_id,
 										food_name : food.name,
@@ -84,7 +95,7 @@
 								</section>
 								
 								<section v-else>
-									<span class="food_specification_enter" v-on:click="open_specs_button(food)">选规格</span>
+									<span class="food_specification_enter" v-on:click.stop="open_specs_button(food)">选规格</span>
 								</section>
 							</section>
 						</section>
@@ -308,9 +319,13 @@
 			
 		},
 		
+		
+		
 		data(){
 			return{
 				food_specs_data: undefined,
+				
+				food_detail_data: undefined,
 				
 				chosen_specs_food_data: undefined,
 				
@@ -398,6 +413,11 @@
 				
 			},
 			
+			open_food_detail(specfoods_object){
+				this.food_detail_data = specfoods_object;
+				this.$router.push({ name:'food_detail' , query: specfoods_object })
+			},
+			
 			clear_shop_cart(){
 				// 操作cookie
 				for ( let i = 0 ; i < this.user_order_data.length ; i++ ){
@@ -465,6 +485,10 @@
 							arr.splice(i,1)
 						}
 					}
+				}
+				
+				if ( this.shop_cart_state == 1 && !this.order_sum){
+					this.shop_cart_state = 0
 				}
 				
 				// cookie 部分

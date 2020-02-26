@@ -221,7 +221,7 @@
 <script>
 	export default {
 		created() {
-			
+			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/ugc/v2/restaurants/1/ratings?offset=0&limit=10' , method: 'GET' , which: 14 , renewway:'set' })
 		},
 		
 		computed:{

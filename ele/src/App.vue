@@ -14,7 +14,6 @@ export default {
 <style>
 	body,html,#app{
 		width:100%;
-		height:100%;
 		margin: 0;
 		
 		background-color: #f5f5f5;
@@ -26,7 +25,8 @@ export default {
 		margin: 0;
 	}
 	
-	h1{
+	h1,h2,h3,h4,h5{
 		margin: 0;
 	}
+	
 </style>

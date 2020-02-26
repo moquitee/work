@@ -9,8 +9,16 @@ import shop_catagory from './router/shop_catagory.vue';
 import shop from './router/shop/shop.vue';
 import shop_menu from './router/shop/shop_menu.vue';
 import shop_rate from './router/shop/shop_rate.vue';
-import shop_detail from './router/shop/shop_detail.vue'
-import food_detail from './router/shop/food_detail.vue'
+import shop_detail from './router/shop/shop_detail.vue';
+import food_detail from './router/shop/food_detail.vue';
+import shop_safe from './router/shop/shop_safe.vue';
+import user from './router/user/user.vue';
+import user_info from './router/user/user_info.vue';
+import login from './router/login.vue';
+import set_username from './router/user/user_info/set_username.vue';
+import set_address from './router/user/user_info/set_address.vue';
+import add_address from './router/user/user_info/set_address/add_address.vue'
+import add_address_detail from './router/user/user_info/set_address/add_address_detail.vue'
 
 Vue.use(VueRouter);
 
@@ -42,7 +50,7 @@ const routes = [
 	},
 	{
 		name:'shop',
-		path:'/shop',
+		path:'/shop/:shop_id',
 		component:shop,
 		children:[
 			{
@@ -64,10 +72,57 @@ const routes = [
 				name:'food_detail',
 				path:'food_detail',
 				components: { shop_menu_or_rate:food_detail} ,
+			},
+			{
+				name:'shop_safe',
+				path:'shop_safe',
+				components: { shop_menu_or_rate:shop_safe },
 			}
 		]
 	},
-	
+	{
+		name:'user',
+		path:'/user',
+		component: user,
+		children:[
+			{
+				name:'user_info',
+				path:'user_info',
+				component:user_info,
+				children:[
+					{
+						name:'set_username',
+						path:'set_username',
+						component:set_username,
+					},
+					{
+						name:'set_address',
+						path:'set_address',
+						component:set_address,
+						children:[
+							{
+								name:'add_address',
+								path:'add_address',
+								component:add_address,
+								children:[
+									{
+										name:'add_address_detail',
+										path:'add_address_detail',
+										component:add_address_detail,
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		name:'login',
+		path:'/login',
+		component: login,
+	}
 ];
 
 export default new VueRouter({

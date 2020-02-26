@@ -1,7 +1,7 @@
 <template>
-	<div class="shop_detail_container">
+	<div class="shop_detail_container" v-if="shop_info">
 		<header class="shop_detail_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h1>商家详情</h1>
 		</header>
 		
@@ -12,17 +12,12 @@
 			
 			<section class="shop_activities_properties">
 				<ul>
-					<li>
-						<span>保</span>
-						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
-					</li>
-					<li>
-						<span>保</span>
-						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
-					</li>
-					<li>
-						<span>保</span>
-						<span>已加入“外卖保”计划，食品安全有保障(APP专享)</span>
+					<li
+					v-for="activity in [ ...shop_info.activities , ...shop_info.supports ]"
+					v-bind:key="activity.id"
+					>
+						<span v-bind:style="{ background: '#' + activity.icon_color }">{{ activity.icon_name }}</span>
+						<span>{{ activity.description }}(APP专享)</span>
 					</li>
 				</ul>
 			</section>
@@ -31,7 +26,7 @@
 		<div class="shop_status_container">
 			<h1 class="shop_status_header">
 				<span>食品监督安全公示</span>
-				<span class="shop_identified_certificates">企业认证详情&gt;</span>
+				<span class="shop_identified_certificates" v-on:click="$router.push('/shop/shop_safe')">企业认证详情&gt;</span>
 			</h1>
 			
 			<section class="shop_status_detail">
@@ -46,22 +41,41 @@
 		<div class="shop_info_detail">
 			<h1 class="shop_status_header">商家信息</h1>
 			<div>
-				<section>效果演示</section>
-				<section>地址：广东省广州市越秀区中山五路219号华联购物中心F1</section>
-				<section>营业时间：[8:30/20:30]</section>
-				<section style="display: flex; justify-content: space-between;">营业执照<span>&gt;</span></section>
-				<section style="display: flex; justify-content: space-between;">餐饮服务许可证<span>&gt;</span></section>
+				<section>{{ shop_info.name }}</section>
+				<section>地址：{{ shop_info.address }}</section>
+				<section>营业时间：[{{ shop_info.opening_hours[0] }}]</section>
+				<section style="display: flex; justify-content: space-between;" v-on:click="img_switch=1">营业执照<span>&gt;</span></section>
+				<section style="display: flex; justify-content: space-between;" v-on:click="img_switch=2">餐饮服务许可证<span>&gt;</span></section>
 			</div>
 		</div>
 		
-		<div class="license_info">
-			<img src='//elm.cangdu.org/img/167543e555722785.jpeg'>
+		<div class="license_container" v-show="img_switch" v-on:click="img_switch=0">
+			<img class="bussiness_license" 
+			v-bind:src=" '//elm.cangdu.org/img/' + shop_info.license.business_license_image " 
+			v-show="img_switch === 1"
+			>
+			<img class="catering_service_liscense"
+			v-bind:src=" '//elm.cangdu.org/img/' + shop_info.license.catering_service_license_image "
+			v-show="img_switch === 2"
+			>
 		</div>
 	</div>
 </template>
 
 <script>
 	export default{
+		data(){
+			return{
+				img_switch: 0 ,// 0 关闭 ，1 营业执照打开 ， 2 餐饮服务许可证打开
+			}
+		},
+		
+		computed:{
+			shop_info(){
+				return this.$store.state.acquireData[10]
+			}
+		},
+		
 	}
 </script>
 
@@ -79,6 +93,7 @@
 	
 	.shop_detail_header{
 		position: fixed;
+		z-index: 15;
 		
 		text-align: center;
 		
@@ -188,5 +203,25 @@
 		
 		font-size: 1.2rem;
 		color: #666;
+	}
+	
+	.license_container{
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 16;
+		
+		background: rgba(0,0,0,0.3);
+	}
+	
+	.license_container img{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		
+		width: 100%;
+		transform: translate(-50%,-50%);
 	}
 </style>

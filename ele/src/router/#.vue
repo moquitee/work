@@ -5,9 +5,8 @@
 		<router-link class="positionlink" to="/city">
 			<span class="position">{{ position_name }}</span>
 		</router-link>
-		<router-link class="login" to="/login">
-			<span class="signup">登陆|注册</span>
-		</router-link>
+		
+		<img class="login" v-on:click="$router.push('/user')" src="../assets/user.png">
 	</div>
 	
 	<div class="content">
@@ -56,7 +55,11 @@
 			</header>
 			
 			<ul class="shoplist" v-on:touchend="shop_loading">
-				<li class="shopinfo" v-for="shop in shop_info" v-bind:key="shop.id">
+				<li class="shopinfo"
+				v-for="shop in shop_info"
+				v-bind:key="shop.id"
+				v-on:click="$router.push({ name:'shop' , params:{ shop_id : shop.id }})"
+				>
 					<img v-bind:src="'//elm.cangdu.org/img/'+shop.image_path" class="shop_img">
 					
 					<section class="shop_right">
@@ -195,7 +198,7 @@
 			<span>订单</span>
 		</section>
 		<section class="guide">
-			<img id="wode" src="../assets/wode.png">
+			<img id="wode" v-on:click="$router.push({ name: 'user' })" src="../assets/wode.png">
 			<span>我的</span>
 		</section>
 	</div>
@@ -371,13 +374,13 @@ export default {
 	.header {
 		position:fixed;
 		top:0;
-		z-index: 998;
+		z-index: 11;
 		
 		background: #3190e8;
 		color: #fff;
 		
 		margin: 0 auto;
-		width: 30rem;
+		width: 100%;
 		height: 4rem;
 	}
 	
@@ -388,16 +391,15 @@ export default {
 		
 		padding-top:4rem;
 		
-		background: ;
 	}
 	
 	.footer{
 		position:fixed;
 		bottom:0;
-		z-index: 999;
+		z-index: 11;
 		
 		margin: 0 auto;
-		width: 30rem;
+		width: 100%;
 		height: 4rem;
 		
 		background: #FFF;
@@ -414,12 +416,12 @@ export default {
 	}
 	
 	.positionlink{
-		position:absolute;
-		top:1.5rem;
-		left:7.6rem;
+		position: absolute;
+		top: 1.3rem;
+		left: 7.6rem;
 		
 		font-size: 1.5rem;
-		width:15rem;
+		width: 15rem;
 		
 		color: #FFFFFF;
 		text-decoration: none;
@@ -436,12 +438,8 @@ export default {
 	
 	.login{
 		position: absolute;
-		right: 1.1rem;
-		top: 1.6rem;
-		
-		font-size: 1.2rem;
-		color: #FFFFFF;
-		text-decoration: none;
+		right: 1.5rem;
+		top: 1.5rem;
 	}
 	
 	.guide{

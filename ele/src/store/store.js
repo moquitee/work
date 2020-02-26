@@ -20,6 +20,11 @@ const state = {
 		{},// 序号12 对应 商店评价分数
 		[],// 序号13 对应 商店评价分类
 		[],// 序号14 对应 商店评价信息
+		{},// 序号15 对应 验证码地址
+		{},// 序号16 对应 登陆返回用户信息
+		{},// 序号17 对应 登录后用户信息
+		{},// 序号18 对应 上传图片后返回图片信息
+		{},// 序号19 对应 上传地址后返回地址信息
 	],
 	
 	user_input_data:'',
@@ -40,16 +45,34 @@ const mutations = {
 
 const actions = {
 	fetchData: function ( { commit } , anObject ){ //传入一个对象 { url , method , which , renewway }
-		fetch(anObject.url,{
-			method: anObject.method ,
-		}).then((result) => {
+		let fetch_promise = undefined;
+		if ( anObject.method == 'GET'){
+			if ( anObject.appendix ){
+				fetch_promise = fetch(anObject.url,{ method: 'GET' , credentials: 'include' , ...anObject.appendix })
+			}
+			else{
+				fetch_promise = fetch(anObject.url,{ method: 'GET' , credentials: 'include' })
+			}
+		}
+		else if ( anObject.method == 'POST' ){
+			if ( anObject.appendix ){
+				fetch_promise = fetch(anObject.url,{ method: 'POST' , ...anObject.appendix })
+			}
+			else {
+				fetch_promise = fetch(anObject.url,{ method: 'POST'})
+			}
+		}
+		
+		return fetch_promise.then((result) => {
 			return result.text();
 		}).then((result) => {
 			commit('getData', { which:anObject.which , data:JSON.parse(result) , renewway:anObject.renewway })
+			return JSON.parse(result)
 		}) .catch((error) => {
 			window.console.log(error);
-			this.dispatch('fetchData', anObject );
 		})
+		
+		
 	},
 };
 export default new Vuex.Store({
