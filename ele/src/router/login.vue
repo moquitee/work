@@ -109,6 +109,7 @@
 					this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v2/login' , method: 'POST' , which: 16 , renewway:'set' , appendix: { headers:{ 'content-type' : 'application/json' } , credentials: 'include' , body: JSON.stringify(user_info_post_data) } }).then((result)=>{
 						if ( result.message ){
 							this.alert_text = result.message
+							this.get_captcha()
 						}
 						else{
 							this.$router.push('/user')
@@ -288,6 +289,21 @@
 		border-bottom-right-radius: 0.5rem;
 		
 		animation: tipMove 0.4s;
+	}
+	
+	@keyframes tipMove{
+		0%{
+			-webkit-transform:scale(1);transform:scale(1)
+		}
+		35%{
+			-webkit-transform:scale(0.8);transform:scale(0.8)
+		}
+		70%{
+			-webkit-transform:scale(1.1);transform:scale(1.1)
+		}
+		100%{
+			-webkit-transform:scale(1);transform:scale(1)
+		}
 	}
 	
 	.alert_icon{

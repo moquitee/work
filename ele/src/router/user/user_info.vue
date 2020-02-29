@@ -1,7 +1,7 @@
 <template>
 	<div v-if="user_info">
 		<header class="user_info_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>账户信息</h2>
 		</header>
 		
@@ -46,7 +46,7 @@
 			安全设置
 		</section>
 		
-		<section class="user_info_bind_phone">
+		<section class="user_info_bind_phone" v-on:click="$router.push({ name : 'user_password' })">
 			<span>登录密码</span>
 			<section>
 				<span>修改</span>

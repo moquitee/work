@@ -19,6 +19,11 @@ import set_username from './router/user/user_info/set_username.vue';
 import set_address from './router/user/user_info/set_address.vue';
 import add_address from './router/user/user_info/set_address/add_address.vue'
 import add_address_detail from './router/user/user_info/set_address/add_address_detail.vue'
+import user_password from './router/user/user_info/user_password.vue'
+import balance from './router/user/balance.vue'
+import benefit from './router/user/benefit.vue'
+import hongbao from './router/user/benefit/hongbao.vue'
+import daijinquan from './router/user/benefit/daijinquan.vue'
 
 Vue.use(VueRouter);
 
@@ -95,6 +100,7 @@ const routes = [
 						path:'set_username',
 						component:set_username,
 					},
+					
 					{
 						name:'set_address',
 						path:'set_address',
@@ -113,6 +119,36 @@ const routes = [
 								]
 							}
 						]
+					},
+					
+					{
+						name:'user_password',
+						path:'user_password',
+						component:user_password,
+					}
+				]
+			},
+			
+			{
+				name:'balance',
+				path:'balance',
+				component: balance,
+			},
+			
+			{
+				name:'benefit',
+				path:'benefit',
+				component:benefit,
+				children:[
+					{
+						name:'hongbao',
+						path:'hongbao',
+						component:hongbao,
+					},
+					{
+						name:'daijinquan',
+						path:'daijinquan',
+						component:daijinquan,
 					}
 				]
 			}

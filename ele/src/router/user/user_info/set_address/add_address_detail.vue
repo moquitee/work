@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<header class="add_address_detail_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>搜索地址</h2>
 		</header>
 		
 		<section class="add_address_detail_search_button">
-			<input type="text" placeholder="请输入小区/写字楼/学校等" v-model="user_input_search_address" />
+			<input type="text" placeholder="请输入小区/写字楼/学校等" v-model="user_input_search_address" v-on:keydown.enter="search_site()" />
 			<button v-on:click="search_site()">确认</button>
 		</section>
 		
@@ -19,7 +19,7 @@
 				v-bind:key="site.geohash"
 				v-on:click="choose_site(
 				{
-					address_deatil : site.name,
+					address_detail : site.name,
 					address : site.address,
 					geohash : site.geohash,
 				})"
@@ -59,7 +59,7 @@
 			
 			choose_site( anObject ){
 				this.$root.$emit('accept_site',anObject)
-				this.$router.push({ name: 'add_address_detail' })
+				this.$router.replace({ name: 'add_address' })
 			}
 		}
 	}

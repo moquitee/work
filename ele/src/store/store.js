@@ -22,9 +22,12 @@ const state = {
 		[],// 序号14 对应 商店评价信息
 		{},// 序号15 对应 验证码地址
 		{},// 序号16 对应 登陆返回用户信息
-		{},// 序号17 对应 登录后用户信息
+		{},// 序号17 对应 获取在此用户代理已经登陆的用户信息
 		{},// 序号18 对应 上传图片后返回图片信息
 		{},// 序号19 对应 上传地址后返回地址信息
+		[],// 序号20 对应 获取用户地址信息
+		{},// 序号21 对应 删除用户地址信息
+		{},// 序号22 对应 更改密码返回信息
 	],
 	
 	user_input_data:'',
@@ -60,6 +63,14 @@ const actions = {
 			}
 			else {
 				fetch_promise = fetch(anObject.url,{ method: 'POST'})
+			}
+		}
+		else if ( anObject.method == 'DELETE' ){
+			if ( anObject.appendix ){
+				fetch_promise = fetch(anObject.url,{ method: 'DELETE' , ...anObject.appendix })
+			}
+			else {
+				fetch_promise = fetch(anObject.url,{ method: 'DELETE'})
 			}
 		}
 		

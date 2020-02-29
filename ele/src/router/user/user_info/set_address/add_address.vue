@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<header class="add_address_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>新增地址</h2>
 		</header>
 		
@@ -13,7 +13,7 @@
 				</li>
 				
 				<li>
-					<input type="text" placeholder="小区/写字楼/学校等" v-model="chosen_site" readonly="readonly"/>
+					<input type="text" placeholder="小区/写字楼/学校等" v-model="chosen_site" readonly="readonly" v-on:click="$router.push({ name: 'add_address_detail' })"/>
 				</li>
 				
 				<li>
@@ -33,8 +33,8 @@
 			</ul>
 		</section>
 		
-		<section class="add_address_comfirm">
-			<button>新增地址</button>
+		<section class="add_address_comfirm" v-on:click="post_user_address()">
+			<button v-bind:class="{ active : user_input_are_totally_valid }">新增地址</button>
 		</section>
 		
 		<router-view class="add_address_detail_page"></router-view>
@@ -45,7 +45,8 @@
 	export default{
 		created(){
 			this.$root.$on('accept_site',(site_object)=>{
-				this.chosen_site = site_object.address_deatil
+				this.chosen_site_detail = site_object;
+				this.chosen_site = site_object.address_detail;
 			})
 		},
 		
@@ -53,6 +54,9 @@
 			return {
 				name: undefined,
 				chosen_site: undefined,
+				
+				chosen_site_detail:{},
+				
 				address_detail: undefined,
 				phone_number: undefined,
 				auxiliary_number: undefined,
@@ -69,6 +73,21 @@
 			}
 		},
 		
+		computed:{
+			user_id(){
+				return this.$store.state.acquireData[17].user_id
+			},
+			
+			user_input_are_totally_valid(){
+				if ( this.name_valid && this.name && this.chosen_site && this.address_detail && this.address_detail_valid && this.phone_number && this.phone_number_valid && this.auxiliary_number_valid ){
+					return true
+				}
+				else{
+					return false
+				}
+			}
+		},
+		
 		methods:{
 			identify_valid_or_not(num){
 				if ( num == 0 ){
@@ -80,10 +99,10 @@
 					}
 				}
 				else if ( num == 2 ){
-					if ( this.address_detail.length && this.address_detail.length > 2 ){
+					if ( this.address_detail && this.address_detail.length > 2 ){
 						this.address_detail_valid = true;
 					}
-					else if ( this.address_detail.length && 0 < this.address_detail.length <= 2 ){
+					else if ( this.address_detail && 0 < this.address_detail.length <= 2 ){
 						this.address_detail_valid = false;
 						this.address_detail_alarm = '送餐地址太短了，不能辨识';
 					}
@@ -117,6 +136,31 @@
 					else{
 						this.auxiliary_number_valid = true;
 					}
+				}
+			},
+			
+			post_user_address(){
+				if ( this.user_input_are_totally_valid ){
+					window.console.log(this.chosen_site_detail.address_detail)
+					this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses' , method: 'POST' , which: 19 , renewway:'set' , appendix:{
+							credentials: 'include',
+							headers: { 'content-type' : 'application/json' },
+							body: JSON.stringify({
+								address: this.address_detail,
+								address_detail: this.chosen_site_detail.address_detail,
+								geohash: this.chosen_site_detail.geohash,
+								name: this.name,
+								phone: this.phone_number,
+								phone_bk: this.auxiliary_number,
+								sex: 1,
+								tag: '家',
+								tag_type: 2,
+							})
+						},
+					}).then(()=>{
+						this.$router.replace({ name : 'set_address' });
+						this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'});
+					})
 				}
 			}
 		}
