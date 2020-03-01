@@ -6,13 +6,19 @@
 
 <script>
 export default {
-	watch:{
+	/*watch:{
 		// 如果路由有变化，会再次执行该方法
 		$route(){
 			window.console.log('路由跳转')
 			this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/user' , method: 'GET' , which: 17 , renewway:'set' });
 		}
-	},
+	},*/
+	created() {
+		this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/user' , method: 'GET' , which: 17 , renewway:'set' }).then((result)=>{
+			localStorage.setItem( 'user_id' , result.user_id )
+		});
+		
+	}
 }
 
 </script>
@@ -35,4 +41,7 @@ export default {
 		margin: 0;
 	}
 	
+	input{
+		border: none;
+	}
 </style>

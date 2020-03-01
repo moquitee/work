@@ -5,7 +5,7 @@
 			<h2>账户信息</h2>
 		</header>
 		
-		<div>
+		<div class="user_info_first">
 			<section class="user_info_avatar_container">
 				<span>头像</span>
 				<section>
@@ -143,13 +143,13 @@
 		font-size: 2rem;
 	}
 	
-	.user_info_page>div:nth-of-type(1){
+	.user_info_first{
 		padding-top: 4rem;
 		
 		background: #FFFFFF;
 	}
 	
-	.user_info_page>div:nth-of-type(1)>section{
+	.user_info_first>section{
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -179,7 +179,7 @@
 		font-size: 1.8rem;
 	}
 	
-	.user_info_page>div:nth-of-type(1)>section:nth-of-type(2)>section>span:nth-of-type(1){
+	.user_info_first>section:nth-of-type(2)>section>span:nth-of-type(1){
 		font-size: 1.15rem;
 		font-weight: bold;
 		color: #999;
@@ -187,7 +187,7 @@
 		margin-right: 0.5rem;
 	}
 	
-	.user_info_page>div:nth-of-type(1)>section:nth-of-type(2)>section>span:nth-of-type(2){
+	.user_info_first>section:nth-of-type(2)>section>span:nth-of-type(2){
 		position: relative;
 		top: 0.2rem;
 		

@@ -24,6 +24,9 @@ import balance from './router/user/balance.vue'
 import benefit from './router/user/benefit.vue'
 import hongbao from './router/user/benefit/hongbao.vue'
 import daijinquan from './router/user/benefit/daijinquan.vue'
+import exchange from './router/user/benefit/hongbao/exchange.vue'
+import commend from './router/user/benefit/hongbao/commend.vue'
+
 
 Vue.use(VueRouter);
 
@@ -144,6 +147,18 @@ const routes = [
 						name:'hongbao',
 						path:'hongbao',
 						component:hongbao,
+						children:[
+							{
+								name:'exchange',
+								path:'exchange',
+								component:exchange,
+							},
+							{
+								name:'commend',
+								path:'commend',
+								component:commend,
+							}
+						]
 					},
 					{
 						name:'daijinquan',

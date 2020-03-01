@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<header class="benefit_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>我的优惠</h2>
 		</header>
 		
 		<section class="shop_change_page">
-			<router-link :to="{ name : 'hongbao' }" replace><span>商品</span></router-link>
-			<router-link :to="{ name : 'daijinquan' }" replace><span>商家代金券</span></router-link>
+			<router-link :to="{ name : 'hongbao' }">红包</router-link>
+			<router-link :to="{ name : 'daijinquan'}">商家代金券</router-link>
 		</section>
 		
 		<router-view></router-view>
@@ -38,4 +38,10 @@
 		
 		font-size: 2rem;
 	}
+	
+	.user_info_page>.shop_change_page{
+		margin-top: 4rem;
+	}
+	
+	
 </style>

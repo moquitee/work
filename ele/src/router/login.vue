@@ -26,7 +26,7 @@
 					<div class="change_img" v-on:click="get_captcha()">
 						<p>看不清</p>
 						<p>换一张</p>
-				</div>
+					</div>
 				</div>
 			</section>
 		</form>
