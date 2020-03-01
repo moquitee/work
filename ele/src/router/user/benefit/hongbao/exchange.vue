@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<header class="exchange_header">
-			<span>&lt;</span>
+			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>兑换红包</h2>
 		</header>
 		
 		<form class="exchange_form">
-			<input type="text" v-model="exchange_code" placeholder="请输入兑换码">
+			<input type="number" v-model="exchange_code" placeholder="请输入兑换码">
 			<section>
 				<input type="text" maxlength="4" placeholder="验证码" v-model="captcha_code">
 				<section>
@@ -19,7 +19,18 @@
 			</section>
 		</form>
 		
-		<button class="exchange_button" v-bind:class="{ active: user_input_correct }">兑换</button>
+		<button class="exchange_button" v-bind:class="{ active: user_input_correct }" v-on:click="exchange_hongbao()">兑换</button>
+		
+		<div class="alert_container" v-if="alert_text">
+			<section class='tip_text_container'>
+				<div class="alert_icon">
+					<span></span>
+					<span></span>
+				</div>
+				<p>{{ alert_text }}</p>
+				<div class="login_alert_comfirm_button" v-on:click="alert_text = undefined">确认</div>
+			</section>
+		</div>
 	</div>
 </template>
 
@@ -33,22 +44,50 @@
 			return {
 				exchange_code : undefined,
 				captcha_code: undefined,
+				
+				alert_text:undefined,
 			}
 		},
 		
 		computed:{
+			user_id(){
+				return localStorage.getItem('user_id')
+			},
+			
 			captcha_url(){
 				return this.$store.state.acquireData[15].code
 			},
 			
 			user_input_correct(){
-				return false
+				if ( this.exchange_code && this.captcha_code && this.captcha_code.length == 4 ){
+					return true
+				}else{
+					return false
+				}
 			}
 		},
 		
 		methods:{
 			get_captcha(){
 				this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/captchas' , method: 'POST' , which: 15 , renewway: 'set' , appendix: { credentials: 'include'} }) ;
+			},
+			
+			exchange_hongbao(){
+				if ( this.user_input_correct ){
+					this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/users/' + this.user_id + '/hongbao/exchange' , method: 'POST' , which: 24 , renewway: 'set' , appendix: {
+						credentials: 'include',
+						headers:{ 'content-type' : 'application/json' },
+						body:JSON.stringify({
+							exchange_code: this.exchange_code,
+							captcha_code: this.captcha_code,
+						})
+					} }).then((result)=>{
+						if ( result.message ){
+							this.alert_text = result.message
+						}
+					}) ;
+					this.get_captcha()
+				}
 			}
 		}
 	}
@@ -136,5 +175,9 @@
 		color: #FFFFFF;
 		
 		background: #ccc;
+	}
+	
+	.exchange_button.active{
+		background: #4cd964;
 	}
 </style>
