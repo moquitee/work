@@ -75,7 +75,7 @@
 		
 		<section class="user_middle">
 			<ul>
-				<li>
+				<li v-on:click="$router.push({ name: 'service' })">
 					<aside>
 						<img src="../../assets/service_center.png">
 					</aside>
