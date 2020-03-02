@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="shop_rate_container">
 		<header class="rate_score_container" v-if="rate_score_data">
 			<div class="rate_score_left">
 				<p>{{ Math.floor(rate_score_data.food_score * 10) / 10 }}</p>
@@ -241,6 +241,12 @@
 </script>
 
 <style>
+	.shop_rate_container{
+		overflow-y: scroll;
+		
+		height: 100%;
+	}
+	
 	.rate_score_container,.rate_score_container section{
 		display: flex;
 	}

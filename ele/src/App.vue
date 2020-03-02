@@ -41,7 +41,7 @@ export default {
 		margin: 0;
 	}
 	
-	input{
+	input,button{
 		border: none;
 	}
 </style>

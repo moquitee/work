@@ -24,9 +24,11 @@ import balance from './router/user/balance.vue'
 import benefit from './router/user/benefit.vue'
 import hongbao from './router/user/benefit/hongbao.vue'
 import daijinquan from './router/user/benefit/daijinquan.vue'
+import hongbao_history from './router/user/benefit/hongbao/hongbao_history.vue'
 import exchange from './router/user/benefit/hongbao/exchange.vue'
 import commend from './router/user/benefit/hongbao/commend.vue'
-
+import point from './router/user/point.vue'
+import service from './router/user/service.vue'
 
 Vue.use(VueRouter);
 
@@ -142,12 +144,18 @@ const routes = [
 				name:'benefit',
 				path:'benefit',
 				component:benefit,
+				redirect: { name: 'hongbao' },
 				children:[
 					{
 						name:'hongbao',
 						path:'hongbao',
 						component:hongbao,
 						children:[
+							{
+								name:'hongbao_history',
+								path:'hongbao_history',
+								component:hongbao_history,
+							},
 							{
 								name:'exchange',
 								path:'exchange',
@@ -166,6 +174,16 @@ const routes = [
 						component:daijinquan,
 					}
 				]
+			},
+			{
+				name:'point',
+				path:'point',
+				component:point,
+			},
+			{
+				name:'service',
+				path:'service',
+				component:service,
 			}
 		]
 	},

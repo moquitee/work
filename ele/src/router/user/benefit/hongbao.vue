@@ -42,7 +42,7 @@
 			</ul>
 		</section>
 		
-		<p class="hongbao_history">查看历史红包 &gt;</p>
+		<p class="hongbao_history" v-on:click="$router.push({ name: 'hongbao_history' })">查看历史红包 &gt;</p>
 		
 		<footer class="hongbao_footer">
 			<router-link :to="{ name: 'exchange' }">兑换红包</router-link>
@@ -161,6 +161,10 @@
 		flex: 2;
 	}
 	
+	.hongbao_list_container>ul>li>section>section:nth-of-type(2)>p{
+		white-space: nowrap;
+	}
+	
 	.hongbao_list_container>ul>li>section>section:nth-of-type(2)>p:nth-of-type(1){
 		font-size: 1.3rem;
 		
@@ -220,6 +224,7 @@
 		
 		position: fixed;
 		bottom: 0;
+		z-index: 28;
 		
 		height: 4rem;
 		width: 100%;

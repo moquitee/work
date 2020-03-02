@@ -626,6 +626,8 @@ export default {
 	}
 	
 	.shop_rate_info{
+		position: relative;
+		
 		display: flex;
 		
 		width:3.5rem;

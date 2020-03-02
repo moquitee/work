@@ -39,7 +39,7 @@
 					<span class="user_activities_top" v-else>0<span>个</span></span>
 					<span class="user_activities_bottom">我的优惠</span>
 				</li>
-				<li>
+				<li v-on:click="$router.push({ name: 'point' })">
 					<span class="user_activities_top" v-if="user_info">{{ user_info.point }}<span>分</span></span>
 					<span class="user_activities_top" v-else>0<span>分</span></span>
 					<span class="user_activities_bottom">我的积分</span>
