@@ -1,5 +1,5 @@
 <template>
-	<div class="shop_detail_container" v-if="shop_info">
+	<div v-if="shop_info">
 		<header class="shop_detail_header">
 			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h1>商家详情</h1>
@@ -26,7 +26,7 @@
 		<div class="shop_status_container">
 			<h1 class="shop_status_header">
 				<span>食品监督安全公示</span>
-				<span class="shop_identified_certificates" v-on:click="$router.push('/shop/shop_safe')">企业认证详情&gt;</span>
+				<span class="shop_identified_certificates" v-on:click="$router.push({ name: 'shop_safe' })">企业认证详情&gt;</span>
 			</h1>
 			
 			<section class="shop_status_detail">
@@ -80,17 +80,6 @@
 </script>
 
 <style>
-	.shop_detail_container{
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 16;
-		
-		background: #f5f5f5;
-	}
-	
 	.shop_detail_header{
 		position: fixed;
 		z-index: 15;

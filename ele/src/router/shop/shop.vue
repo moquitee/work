@@ -62,6 +62,8 @@
 		</div>
 		
 		<router-view name="shop_menu_or_rate"></router-view>
+		
+		<router-view name="full_page" class="shop_full_page"></router-view>
 	</div>
 </template>
 
@@ -268,5 +270,16 @@
 		
 		font-size: 2rem;
 		color: rgb(153, 153, 153);
+	}
+	
+	.shop_full_page{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 16;
+		
+		background: #f5f5f5;
 	}
 </style>

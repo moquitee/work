@@ -1,0 +1,147 @@
+<template>
+	<div class="confirm_order_page">
+		<header class="confirm_order_header">
+			<span>&lt;</span>
+			<h2>确认订单</h2>
+			<svg>
+				<svg viewBox="0 0 28 33" id="user" width="100%" height="100%"><path fill-rule="evenodd" d="M20.798 19.289c2.636-2.002 4.215-5.091 4.215-8.437 0-5.886-4.845-10.647-10.808-10.647S3.397 4.966 3.397 10.852c0 3.345 1.578 6.433 4.212 8.435l.264-2.678C4.358 18.32 1.591 21.403.168 25.187l1.478.556v-1.579c-1.485.73-1.485.73-1.501 1.079-.054.188-.054.188-.069.278a2.58 2.58 0 0 0-.026.229 9.112 9.112 0 0 0-.019.4c-.008.265-.014.617-.018 1.039-.005.511-.006 1.037-.006 1.451v.027c-.004 1.732 1.41 3.129 3.154 3.129h22.082a3.18 3.18 0 0 0 3.172-3.153l.011-1.305.008-.897.003-.296.001-.083v-.022-.006-.001l.002-.278-.093-.262c-1.385-3.918-4.203-7.122-7.812-8.88l.263 2.678zm-1.911-2.516l-2.045 1.553 2.309 1.125c2.856 1.392 5.106 3.949 6.218 7.093l-.09-.54V26.033l-.001.083-.003.296-.008.897-.011 1.305c0 .01-.011.021-.013.021H3.161c-.007 0 .005.011.005.032v-.031c0-.404.001-.92.006-1.418.004-.4.01-.732.017-.969.004-.121.008-.212.012-.262l-.006.043c-.009.06-.009.06-.058.229-.01.336-.01.336-1.49 1.063H2.74l.385-1.024c1.141-3.035 3.35-5.495 6.131-6.849l2.309-1.124-2.045-1.554c-1.859-1.412-2.964-3.576-2.964-5.92 0-4.129 3.418-7.488 7.649-7.488s7.649 3.359 7.649 7.488c0 2.344-1.106 4.509-2.966 5.921z" class="path1"></path></svg>
+			</svg>
+		</header>
+		
+		<section>
+			<div>
+				<svg>
+					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
+				</svg>
+				
+				<section>
+					<header>
+						<span>用户名字</span>
+						<span>先生</span>
+						<span>13025689810</span>
+					</header>
+					
+					<div>
+						<span>家</span>
+						<span>详细地址</span>
+					</div>
+				</section>
+			</div>
+			
+			<span>&gt;</span>
+		</section>
+		
+		<section>
+			<div>
+				<p>送达时间</p>
+			</div>
+			
+			<div>
+				<p>尽快送达|预计00:47</p>
+				<p>蜂鸟专送</p>
+			</div>
+		</section>
+		
+		<section>
+			<section>
+				<span>支付方式</span>
+				
+				<div>
+					<span>在线支付</span>
+					<span>&gt;</span>
+				</div>
+			</section>
+			
+			<section>
+				<span>红包</span>
+				<span>暂时只在饿了么APP中支持</span>
+			</section>
+		</section>
+		
+		<section>
+			<header>
+				<img src="../../assets/longmao.jpg">
+				<span>效果演示</span>
+			</header>
+			
+			<section>
+				<ul>
+					<li>
+						<p>食物名称</p>
+						<div>
+							<span>X2</span>
+							<span>¥20</span>
+						</div>
+					</li>
+					
+					<section>
+						<p>订单 ¥1432</p>
+						<div>
+							<p>待支付</p>
+							<p>¥1432</p>
+						</div>
+					</section>
+				</ul>
+			</section>
+		</section>
+		
+		<section>
+			<header>
+				<p>订单备注</p>
+				<div>
+					<span>口味、偏好等</span>
+					<span>&gt;</span>
+				</div>
+			</header>
+			
+			<section>
+				<p>发票抬头</p>
+				<div>
+					<span>不需要开发票</span>
+					<span>&gt;</span>
+				</div>
+			</section>
+		</section>
+		
+		<footer>
+			<div>
+				<p>待支付 ¥1419</p>
+			</div>
+			
+			<button>确认下单</button>
+		</footer>
+	</div>
+</template>
+
+<script>
+</script>
+
+<style>
+	.confirm_order_page{
+		bottom: auto;
+	}
+	
+	.confirm_order_header{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		
+		width: 90%;
+		height: 4rem;
+		padding: 0 1.5rem;
+		
+		background: #3190E8;
+		
+		color: #FFFFFF;
+	}
+	
+	.confirm_order_header>svg{
+		fill: #FFFFFF;
+		width: 1.6rem;
+		height: 1.6rem;
+	}
+	
+	.confirm_order_header>span{
+		font-size: 2rem;
+	}
+</style>

@@ -60,16 +60,6 @@
 </script>
 
 <style>
-	.shop_safe{
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		
-		background: #f5f5f5;
-	}
-	
 	.shop_safe>div{
 		margin-bottom: 1rem;
 		

@@ -12,6 +12,9 @@ import shop_rate from './router/shop/shop_rate.vue';
 import shop_detail from './router/shop/shop_detail.vue';
 import food_detail from './router/shop/food_detail.vue';
 import shop_safe from './router/shop/shop_safe.vue';
+
+import confirm_order from './router/shop/confirm_order.vue';
+
 import user from './router/user/user.vue';
 import user_info from './router/user/user_info.vue';
 import login from './router/login.vue';
@@ -30,6 +33,7 @@ import commend from './router/user/benefit/hongbao/commend.vue'
 import point from './router/user/point.vue'
 import service from './router/user/service.vue'
 import download from './router/user/download.vue'
+
 
 Vue.use(VueRouter);
 
@@ -77,17 +81,22 @@ const routes = [
 			{
 				name:'shop_detail',
 				path:'shop_detail',
-				components: { shop_menu_or_rate:shop_detail} ,
+				components: { full_page:shop_detail} ,
 			},
 			{
 				name:'food_detail',
 				path:'food_detail',
-				components: { shop_menu_or_rate:food_detail} ,
+				components: { full_page:food_detail} ,
 			},
 			{
 				name:'shop_safe',
 				path:'shop_safe',
-				components: { shop_menu_or_rate:shop_safe },
+				components: { full_page:shop_safe },
+			},
+			{
+				name:'confirm_order',
+				path:'confirm_order',
+				components: { full_page: confirm_order },
 			}
 		]
 	},
