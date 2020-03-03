@@ -82,7 +82,7 @@
 					<span>服务中心</span>
 					<span>&gt;</span>
 				</li>
-				<li>
+				<li v-on:click="$router.push({ name: 'download' })">
 					<aside>
 						<img src="../../assets/download.png">
 					</aside>

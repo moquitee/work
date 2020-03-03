@@ -29,6 +29,7 @@ import exchange from './router/user/benefit/hongbao/exchange.vue'
 import commend from './router/user/benefit/hongbao/commend.vue'
 import point from './router/user/point.vue'
 import service from './router/user/service.vue'
+import download from './router/user/download.vue'
 
 Vue.use(VueRouter);
 
@@ -184,6 +185,11 @@ const routes = [
 				name:'service',
 				path:'service',
 				component:service,
+			},
+			{
+				name:'download',
+				path:'download',
+				component:download,
 			}
 		]
 	},
