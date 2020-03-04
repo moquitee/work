@@ -8,73 +8,85 @@
 			</svg>
 		</header>
 		
-		<section>
-			<div>
+		<section class="shop_address_container">
+			<div class="shop_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
 				</svg>
 				
-				<section>
+				<section class="order_user_info">
 					<header>
 						<span>用户名字</span>
 						<span>先生</span>
 						<span>13025689810</span>
 					</header>
 					
-					<div>
+					<div class="order_address_detail">
 						<span>家</span>
 						<span>详细地址</span>
 					</div>
 				</section>
 			</div>
 			
-			<span>&gt;</span>
+			<span class="shop_address_right">&gt;</span>
 		</section>
 		
-		<section>
-			<div>
+		<section class="shop_empty_address_container">
+			<div class="empty_address_left">
+				<svg>
+					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
+				</svg>
+				
+				<p>请添加一个收货地址</p>
+			</div>
+			
+			<span class="empty_address_right">&gt;</span>
+		</section>
+		
+		<section class="shop_delivery_model_container">
+			<div class="shop_delivery_left">
 				<p>送达时间</p>
 			</div>
 			
-			<div>
+			<div class="shop_delivery_right">
 				<p>尽快送达|预计00:47</p>
 				<p>蜂鸟专送</p>
 			</div>
 		</section>
 		
-		<section>
-			<section>
+		<section class="pay_methods_container">
+			<section class="pay_methods">
 				<span>支付方式</span>
 				
-				<div>
+				<div class="more_type">
 					<span>在线支付</span>
 					<span>&gt;</span>
 				</div>
 			</section>
 			
-			<section>
+			<section class="pay_hongbao">
 				<span>红包</span>
 				<span>暂时只在饿了么APP中支持</span>
 			</section>
 		</section>
 		
-		<section>
+		<section class="order_foods_container">
 			<header>
 				<img src="../../assets/longmao.jpg">
 				<span>效果演示</span>
 			</header>
 			
-			<section>
+			<section class="order_foods_list_container">
 				<ul>
 					<li>
 						<p>食物名称</p>
-						<div>
+						<div class="ordered_food_quantity_and_price">
 							<span>X2</span>
 							<span>¥20</span>
 						</div>
 					</li>
 					
-					<section>
+					<section class="order_total_price">
 						<p>订单 ¥1432</p>
 						<div>
 							<p>待支付</p>
@@ -85,28 +97,26 @@
 			</section>
 		</section>
 		
-		<section>
-			<header>
+		<section class="order_more_detail">
+			<header class="order_remark">
 				<p>订单备注</p>
-				<div>
+				<div class="more_type">
 					<span>口味、偏好等</span>
 					<span>&gt;</span>
 				</div>
 			</header>
 			
-			<section>
+			<section class="order_check">
 				<p>发票抬头</p>
-				<div>
+				<div class="more_type">
 					<span>不需要开发票</span>
 					<span>&gt;</span>
 				</div>
 			</section>
 		</section>
 		
-		<footer>
-			<div>
-				<p>待支付 ¥1419</p>
-			</div>
+		<footer class="order_footer">
+			<p>待支付 ¥1419</p>
 			
 			<button>确认下单</button>
 		</footer>
@@ -144,4 +154,7 @@
 	.confirm_order_header>span{
 		font-size: 2rem;
 	}
+	
+	
+	
 </style>
