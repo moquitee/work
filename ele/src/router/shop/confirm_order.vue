@@ -132,6 +132,10 @@
 	}
 	
 	.confirm_order_header{
+		position: fixed;
+		top: 0;
+		left: 0;
+		
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -153,6 +157,20 @@
 	
 	.confirm_order_header>span{
 		font-size: 2rem;
+	}
+	
+	.shop_address_container,.shop_empty_address_container{
+		margin-top: 4rem;
+		
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.shop_address_left>svg,.empty_address_left>svg{
+		width: 1.6rem;
+		height: 1.6rem;
+		fill: #3190E8;
 	}
 	
 	
