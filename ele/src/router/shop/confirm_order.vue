@@ -31,7 +31,7 @@
 			<span class="shop_address_right">&gt;</span>
 		</section>
 		
-		<section class="shop_empty_address_container">
+		<section class="shop_empty_address_container" style="display: none;">
 			<div class="empty_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -55,7 +55,7 @@
 		</section>
 		
 		<section class="pay_methods_container">
-			<section class="pay_methods">
+			<section class="order_item_style">
 				<span>支付方式</span>
 				
 				<div class="more_type">
@@ -64,7 +64,7 @@
 				</div>
 			</section>
 			
-			<section class="pay_hongbao">
+			<section class="order_item_style">
 				<span>红包</span>
 				<span>暂时只在饿了么APP中支持</span>
 			</section>
@@ -161,9 +161,17 @@
 	
 	.shop_address_container,.shop_empty_address_container{
 		margin-top: 4rem;
+		padding: 1.5rem;
 		
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
+		
+		background: #FFFFFF url(../../assets/confirm_order_border.png) 0 100% repeat-x
+	}
+	
+	.shop_address_left,.empty_address_left{
+		display: flex;
 		align-items: center;
 	}
 	
@@ -171,8 +179,119 @@
 		width: 1.6rem;
 		height: 1.6rem;
 		fill: #3190E8;
+		
+		margin-right: 0.6rem;
+	}
+	
+	.order_user_info>header>span:first-of-type{
+		margin-right: 0.2rem;
+		
+		font-size: 1.6rem;
+		font-weight: bold;
+	}
+	
+	.order_user_info>header>span:nth-of-type(2){
+		margin-right: 0.2rem;
+		
+		font-size: 1.2rem;
+	}
+	
+	.order_user_info>header>span:nth-of-type(3){
+		font-size: 1.2rem;
+	}
+	
+	.order_address_detail>span:first-of-type{
+		margin-right: 0.5rem;
+		padding: 0 0.4rem;
+		border-radius: 0.3rem;
+		
+		background: #ff5722;
+		color: #FFFFFF;
+	}
+	
+	.order_address_detail>span:nth-of-type(2){
+		font-size: 1.1rem;
+		color: #777;
+	}
+	
+	.shop_address_right,.empty_address_right{
+		font-size: 2rem;
+		
+		color: #999999;
+	}
+	
+	.shop_delivery_model_container{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		
+		margin-top: 0.6rem;
+		border-left: 0.4rem solid #3190E8;
+		padding-left: 1.5rem;
+		padding-right: 1.2rem;
+		
+		min-height: 8rem;
+		
+		background: #FFFFFF;
+	}
+	
+	.shop_delivery_left>p{
+		font-size: 1.6rem;
+		font-weight: bold;
 	}
 	
 	
+	.shop_delivery_right>p:first-of-type{
+		margin-bottom: 0.8rem;
+		
+		font-size: 1.4rem;
+		color: #3190e8;
+	}
 	
+	.shop_delivery_right>p:nth-of-type(2){
+		display: inline-block;
+		
+		padding: 0.2rem;
+		border-radius: 0.3rem;
+		
+		color: #FFFFFF;
+		background: #3190E8;
+		
+		float: right;
+	}
+	
+	.pay_methods_container{
+		margin-top: 0.6rem;
+		
+		background-color: #FFFFFF;
+	}
+	
+	.order_item_style{
+		display: flex;
+		justify-content: space-between;
+		
+		padding: 1rem 2rem;
+		border-bottom: 1px solid #ECECEC;
+	}
+	
+	.order_item_style>span:first-of-type{
+		font-size: 1.4rem;
+		color: #666666;
+	}
+	
+	.order_item_style>span:nth-of-type(2){
+		color: #AAAAAA;
+	}
+	
+	.more_type>span:first-of-type{
+		font-size: 1.2rem;
+		color: #AAAAAA;
+	}
+	
+	.more_type>span:nth-of-type(2){
+		margin-left: 0.5rem;
+		
+		font-size: 1.4rem;
+		color: #AAAAAA;
+	}
 </style>
