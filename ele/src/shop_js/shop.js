@@ -61,4 +61,5 @@ shop.get_valid_img_url = function ( url ){
 }
 
 
+
 export default shop
