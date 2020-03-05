@@ -68,28 +68,46 @@
 								<section v-if="food.specfoods.length <= 1">
 									<span class="food_order_quantities_minus"
 									v-if="get_valid_single_food_num(food.specfoods[0].food_id)"
-									v-on:click.stop="reduce_order(food.specfoods[0].food_id,
+									v-on:click.stop="reduce_order(
 									{ 
-										category_id : food.category_id,
-										food_name : food.name,
-										item_id : food.item_id,
-										specs_name: '默认',
-										food_id: food.specfoods[0].food_id,
-										price: food.specfoods[0].price,
-										order_num: 1,
+										food.restaurant_id:{
+											food.category_id:{
+												food.specfoods[0].item_id:{
+													food.specfoods[0].food_id:{
+														id : food.specfoods[0].food_id,
+														name : food.name,
+														specs : '默认',
+														num : 1,
+														packing_fee : food.specfoods[0].packing_fee,
+														price : food.specfoods[0].price,
+														sku_id : food.specfoods[0].sku_id,
+														stock : food.specfoods[0].stock,
+													}
+												}
+											}
+										}
 									})"
 									>-</span>
 									<span class="food_order_quantities" v-if="get_valid_single_food_num(food.specfoods[0].food_id)"> {{ get_valid_single_food_num(food.specfoods[0].food_id) }} </span>
 									<span class="food_order_quantities_plus"
-									v-on:click.stop="add_order(food.specfoods[0].food_id,
-									{ 
-										category_id : food.category_id,
-										food_name : food.name,
-										item_id : food.item_id,
-										specs_name: '默认',
-										food_id: food.specfoods[0].food_id,
-										price: food.specfoods[0].price,
-										order_num: 1,
+									v-on:click.stop="add_order(
+									{
+										food.restaurant_id:{
+											food.category_id:{
+												food.specfoods[0].item_id:{
+													food.specfoods[0].food_id:{
+														id : food.specfoods[0].food_id,
+														name : food.name,
+														specs : '默认',
+														num : 1,
+														packing_fee : food.specfoods[0].packing_fee,
+														price : food.specfoods[0].price,
+														sku_id : food.specfoods[0].sku_id,
+														stock : food.specfoods[0].stock,
+													}
+												}
+											}
+										}
 									})"
 									>+</span>
 								</section>
@@ -331,7 +349,7 @@
 				
 				food_category_position_list: undefined,
 				
-				user_order_data:[],
+				user_order_data:{},
 				
 				shop_cart_state: 0, //0关闭 1打开
 			}
@@ -383,18 +401,30 @@
 				return min_price
 			},
 			
-			open_specs_button( food ){
-				this.food_specs_data = food;
-				let first_food = food.specfoods[0]
-				this.chosen_specs_food_data = { 
-								category_id : food.category_id,
-								food_name : first_food.name,
-								item_id : first_food.item_id,
-								specs_name: first_food.specs_name,
-								food_id: first_food.food_id,
-								price: first_food.price,
-								order_num: 1,
-							};
+			add_order(anObject){
+				/*
+				let shop_id = (anObject.keys())[0];
+				let catagory_id = (anObject[shop_id].keys())[0];
+				let item_id = ( anObject[shop_id][catagory_id].keys())[0];
+				let food_id = ( anObject[shop_id][catagory_id][item_id].keys())[0];
+				
+				if ( this.user_order_data && this.user_order_data[shop_id] && this.user_order_data[shop_id][catagory_id] && this.user_order_data[shop_id][catagory_id][item_id] && this.user_order_data[shop_id][catagory_id][item_id][shop_id] ){
+					this.user_order_data[shop_id][catagory_id][item_id][shop_id].num += 1;
+				}
+				*/
+			   
+			   let enter_key = (anObject.keys())[0];
+			   let copy_object = JSON.parse(JSON.stringify(anObject));
+			   for ( let i = 0 ; i++ ; i < 4){
+				   if ( copy_object[enter_key] ){
+					   enter_key = (copy_object[enter_key].keys())[0];
+					   copy_object = copy_object.enter_key
+				   }
+				   else{
+					   this.user_order_data[enter_key]
+				   }
+			   }
+			   
 			},
 			
 			close_specs_button(){
@@ -428,72 +458,6 @@
 				this.show_shop_cart()
 				
 				setTimeout(()=>{this.user_order_data = []},400)
-			},
-			
-			get_valid_category_num(category_id){
-				let order_num = 0;
-				let arr = this.user_order_data;
-				for ( let i = 0 ; i < arr.length ; i++){
-					if ( arr[i].category_id == category_id ){
-						order_num += arr[i].order_num
-					}
-				}
-				
-				return order_num
-			},
-			
-			get_valid_single_food_num(food_id){
-				let order_num = 0;
-				let arr = this.user_order_data;
-				for ( let i = 0 ; i < arr.length ; i++){
-					if ( arr[i].food_id == food_id ){
-						order_num += arr[i].order_num
-					}
-				}
-				
-				return order_num
-			},
-			
-			add_order(food_id , anObject ){
-				let arr = this.user_order_data;
-				let food_pre_num = this.get_valid_single_food_num(food_id);
-				if ( food_pre_num ){
-					for ( let i = 0 ; i < this.user_order_data.length ; i++ ){
-						if ( arr[i].food_id == food_id ){
-							arr[i].order_num ++
-						}
-					}
-				}
-				else{
-					arr.push(anObject)
-				}
-				
-				// cookie 部分
-				let days = 7;
-				this.$shop.add_order(food_id , anObject , days)
-			},
-			
-			reduce_order( food_id , anObject){
-				let arr = this.user_order_data;
-				let food_pre_num = this.get_valid_single_food_num(food_id);
-				for ( let i = 0 ; i < this.user_order_data.length ; i++ ){
-					if ( arr[i].food_id == food_id ){
-						if ( food_pre_num > 1 ){
-							arr[i].order_num --
-						}
-						else{
-							arr.splice(i,1)
-						}
-					}
-				}
-				
-				if ( this.shop_cart_state == 1 && !this.order_sum){
-					this.shop_cart_state = 0
-				}
-				
-				// cookie 部分
-				let days = 7;
-				this.$shop.reduce_order(food_id , anObject , days)
 			},
 			
 			show_shop_cart(){
