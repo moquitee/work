@@ -71,8 +71,7 @@
 	export default{
 		created(){
 			window.console.log(this.shop_id)
-			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/shopping/restaurant/'+ this.shop_id , method: 'GET' , which: 10 , renewway:'set' })
-			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/shopping/getcategory/' + this.shop_id , method: 'GET' , which: 11 , renewway:'set' })
+			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/shopping/restaurant/'+ this.shop_id , method: 'GET' , which: 10 , renewway:'set' });
 			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/ugc/v2/restaurants/' + this.shop_id + '/ratings/scores' , method: 'GET' , which: 12 , renewway:'set' })
 			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/ugc/v2/restaurants/' + this.shop_id + '/ratings/tags' , method: 'GET' , which: 13 , renewway:'set' })
 			this.$router.replace({ name:'shop_menu'})

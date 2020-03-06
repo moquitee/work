@@ -35,6 +35,8 @@ const state = {
 	],
 	
 	user_input_data:'',
+	
+	user_shop_cart:{},
 };
 
 const mutations = {
@@ -48,6 +50,10 @@ const mutations = {
 		}
 		window.console.log(state.acquireData[ anObject.which ])
 	},
+	
+	change_shop_cart( state , value ){
+		state.user_shop_cart = value 
+	}
 };
 
 const actions = {

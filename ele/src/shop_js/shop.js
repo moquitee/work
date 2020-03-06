@@ -10,23 +10,68 @@ shop.screen_valid_data = function(arr){
 	let valid_arr = [];
 	for( let i = 0 ; i < arr.length ; i++ ){
 		if ( arr[i].foods.length ){
-			valid_arr.push(i)
+			valid_arr.push( arr[i] )
 		}
 	}
 	return valid_arr;
 };
 
-shop.my_some = function(arr,value){
+shop.my_some = function(arr,key,value,index = false ){
 	if ( arr[0] == null ){
 		return false
 	}
 	
 	for ( let i = 0 ; i < arr.length ; i++){
-		if ( arr[i].icon_name == value ){
-			return true
+		if ( arr[i][key] == value ){
+			if ( index ){
+				return i
+			}
+			else{
+				return true
+			}
 		}
 	}
+	
+	return false
 };
+
+shop.intersection = function ( arr1 , arr2 ){
+	var arr = [];
+			
+		for(var i=0;i<arr1.length;i++){
+			
+			for(var j=0;j<arr2.length;j++){
+			
+				if(arr1[i] === arr2[j]) {
+					arr.push(arr1[i])
+					arr2[j]=null;
+					break;
+				}
+			
+			}
+			
+		}
+		
+	return arr;
+};
+
+shop.combinate = function ( obj1 , obj2 ){
+	let keys1 = Object.keys(obj1);
+	let keys2 = Object.keys(obj2);
+	window.console.log('obj1')
+	window.console.log(obj1)
+	window.console.log('obj2')
+	window.console.log(obj2)
+	let intersection = shop.intersection( keys1 , keys2 )
+	if ( intersection.length && intersection.length == 1 ){
+		obj1[intersection[0]] = shop.combinate( obj1[intersection[0]] , obj2[intersection[0] ] )
+	}
+	else{
+		return { ...obj1 , ...obj2 }
+	}
+	
+	return obj1
+}
 
 shop.add_order = function ( food_id , anObject , days ){
 	if ( cookie.get(food_id) ){
