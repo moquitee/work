@@ -44,4 +44,10 @@ export default {
 	input,button{
 		border: none;
 	}
+	
+	::-webkit-scrollbar{
+		width: 0;
+		height: 0;
+		background-color: #f5f5f5;
+	}
 </style>

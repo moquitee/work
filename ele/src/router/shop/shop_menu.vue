@@ -6,7 +6,7 @@
 				v-for="category in valid_category_list"
 				v-bind:key="category.id"
 				>
-					<span class="food_category_num">1</span>
+					<span class="food_category_num">{{ get_category_num(category_id) }}</span>
 					<span>{{ category.name }}</span>
 				</li>
 			</ul>
@@ -56,10 +56,11 @@
 								</section>
 								<section v-if="food.specfoods.length <= 1">
 									<span class="food_order_quantities_minus"
+									v-on:click="to_cart( 'reduce' , food.category_id , food.item_id , food.specfoods[0].food_id )"
 									>-</span>
 									<span class="food_order_quantities"> 2 </span>
 									<span class="food_order_quantities_plus"
-									v-on:click="add_to_cart( food.category_id , food.item_id , food.specfoods[0].food_id )"
+									v-on:click="to_cart( 'add' , food.category_id , food.item_id , food.specfoods[0].food_id )"
 									>+</span>
 								</section>
 								
@@ -280,6 +281,10 @@
 			shop_info(){
 				return this.$store.state.acquireData[10]
 			},
+			
+			user_shop_cart(){
+				return this.$store.state.user_shop_cart
+			}
 		},
 		
 		methods:{
@@ -293,7 +298,7 @@
 				return min_price
 			},
 			
-			add_to_cart( category_id , item_id , food_id ){
+			to_cart( type , category_id , item_id , food_id ){
 				let specific_category = this.valid_category_list[this.$shop.my_some( this.valid_category_list , 'id' , category_id , true )]
 				let specific_item = (specific_category.foods)[this.$shop.my_some( specific_category.foods , 'item_id' , item_id , true )]
 				let specific_food = (specific_item.specfoods)[this.$shop.my_some( specific_item.specfoods , 'food_id' , food_id , true )]
@@ -318,15 +323,43 @@
 				};
 				
 				if (
-					this.$store.state.user_shop_cart && 
-					this.$store.state.user_shop_cart[this.shop_id] && 
-					this.$store.state.user_shop_cart[this.shop_id][category_id] && 
-					this.$store.state.user_shop_cart[this.shop_id][category_id][item_id] && 
-					this.$store.state.user_shop_cart[this.shop_id][category_id][item_id][food_id] ){
-						this.$store.state.user_shop_cart[this.shop_id][category_id][item_id][food_id].num += 1;
+					this.user_shop_cart && 
+					this.user_shop_cart[this.shop_id] && 
+					this.user_shop_cart[this.shop_id][category_id] && 
+					this.user_shop_cart[this.shop_id][category_id][item_id] && 
+					this.user_shop_cart[this.shop_id][category_id][item_id][food_id] ){
+						if ( type == 'add' ){
+							this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num += 1;
+						}
+						else if ( type == 'reduce' ){
+							if ( this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num <= 1 ){
+								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num = 0;
+							}
+							else {
+								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num -= 1;
+							}
+						}
 					}
 				else{
-					this.$store.commit('change_shop_cart', this.$shop.combinate( this.$store.state.user_shop_cart , food_object ) )
+					if ( type == 'add' ){
+						this.$store.commit('change_shop_cart', this.$shop.combinate( this.$store.state.user_shop_cart , food_object ) )
+					}
+				}
+				
+				window.console.log(this.user_shop_cart)
+			},
+			
+			// 辅助函数 挖掘object对象中 含有key 
+			deep_search_match( obj , key ){
+				
+			},
+			
+			get_category_num(category_id){
+				let num = 0;
+				if ( this.user_shop_cart[this.shop_id] &&
+					this.user_shop_cart[this.shop_id][category_id] &&
+				){
+					
 				}
 			},
 			
