@@ -23,7 +23,7 @@ shop.my_some = function(arr,key,value,index = false ){
 	
 	for ( let i = 0 ; i < arr.length ; i++){
 		if ( arr[i][key] == value ){
-			if ( index ){
+			if ( index != null ){
 				return i
 			}
 			else{
@@ -35,6 +35,7 @@ shop.my_some = function(arr,key,value,index = false ){
 	return false
 };
 
+// 辅助函数 取两个数组的交集
 shop.intersection = function ( arr1 , arr2 ){
 	var arr = [];
 			
@@ -55,6 +56,12 @@ shop.intersection = function ( arr1 , arr2 ){
 	return arr;
 };
 
+/* 辅助函数 将两个object 合并成一个 仅此类object=>
+obj1 = { 1:{3:{2:8}}}
+obj2 = { 1:{4:{3:5}}}
+
+输出 { 1:{ 3:{2:8} , 4:{3:5}} }
+*/
 shop.combinate = function ( obj1 , obj2 ){
 	let keys1 = Object.keys(obj1);
 	let keys2 = Object.keys(obj2);
@@ -119,7 +126,21 @@ shop.deep_search_match = function ( obj , key , value = undefined , find_key = u
 	}
 	
 	return arr
-},
+}
+
+// 辅助函数 将一个object,第一层转换成一个数组
+// obj = { b:1,c:2}
+// 返回 array = [ { b:1 }, { c:2 } ]
+shop.obj_to_arr = function (obj){
+	let arr = [];
+	for ( let i in obj ){
+		arr.push({ [i]:obj[i] })
+	}
+	
+	window.console.log(arr)
+	return arr
+}
+
 
 shop.add_order = function ( food_id , anObject , days ){
 	if ( cookie.get(food_id) ){

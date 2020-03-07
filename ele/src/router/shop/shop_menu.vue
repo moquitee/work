@@ -72,7 +72,7 @@
 									v-if="get_food_num( food.restaurant_id , food.category_id , food.item_id )"
 									>
 									<span class="food_order_quantities"> {{ get_food_num( food.restaurant_id , food.category_id , food.item_id ) }} </span>
-									<span class="food_specification_enter">选规格</span>
+									<span class="food_specification_enter" v-on:click="open_specs( food.category_id , food.item_id )">选规格</span>
 								</section>
 							</section>
 						</section>
@@ -174,26 +174,26 @@
 			</ul>
 		</section>
 		
-		<div style="display: none;">
+		<div v-if="specfoods_data && chosen_specfood">
 			<div class="food_specification">
-				<span class="food_shutdown_button">×</span>
-				<section class="food_specification_name">食物名字</section>
+				<span class="food_shutdown_button" v-on:click="[specfoods_data , chosen_specfood] = [ undefined , undefined ]">×</span>
+				<section class="food_specification_name">{{ chosen_specfood.name }}</section>
 				<section class="food_specification_container">
 					<h4 class="food_specification_title">规格</h4>
 					<ul class="food_specification_options">
-						<li>特定名字</li>
+						<li v-for="specfood in specfoods_data" v-bind:key="specfood.food_id">{{ specfood.name }}</li>
 					</ul>
 				</section>
 				<section class="food_specification_footer">
 					<span>
 						<span class="food_specification_rmb">¥ </span>
-						<span class="food_specification_price">20</span>
+						<span class="food_specification_price">{{ chosen_specfood.price }}</span>
 					</span>
 					<button class="food_specification_add_to_cart">加入购物车</button>
 				</section>
 			</div>
 			
-			<div class="food_specification_cover" v-show="false"></div>
+			<div class="food_specification_cover" v-if="specfoods_data" v-on:click="[specfoods_data , chosen_specfood] = [ undefined , undefined ]"></div>
 		</div>
 		
 		<footer class="menu_footer" v-if="shop_info">
@@ -273,6 +273,9 @@
 				shop_cart_state: 0, //0关闭 1打开
 				
 				order_list:[], // 用户购买的食物清单
+				
+				specfoods_data: undefined,
+				chosen_specfood: undefined,
 			}
 		},
 		
@@ -395,6 +398,26 @@
 				
 				return num
 			},
+			
+			
+			open_specs( category_id , item_id ){
+				for ( let i = 0 ; i < this.valid_category_list.length ; i++ ){
+					if ( this.valid_category_list[i].id == category_id ){
+						for ( let j = 0 ; j < this.valid_category_list[i].foods.length ; j++ ){
+							if ( ((this.valid_category_list[i].foods)[j]).item_id == item_id ){
+								this.specfoods_data = (this.valid_category_list[i].foods)[j].specfoods
+							}
+						}
+					}
+				}
+				
+				for ( let i = 0 ; i < this.specfoods_data.length ; i++ ){
+					this.specfoods_data[i].category_id = category_id
+				}
+			},
+			
+			
+			
 			
 			show_shop_cart(){
 				if (this.shop_cart_state == 0){
