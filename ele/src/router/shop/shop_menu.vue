@@ -6,7 +6,7 @@
 				v-for="category in valid_category_list"
 				v-bind:key="category.id"
 				>
-					<span class="food_category_num">{{ get_category_num(category_id) }}</span>
+					<span class="food_category_num" v-if="get_category_num(category.restaurant_id,category.id)">{{get_category_num(category.restaurant_id,category.id)}}</span>
 					<span>{{ category.name }}</span>
 				</li>
 			</ul>
@@ -55,16 +55,23 @@
 									<span class="food_money" v-else>¥{{ food.specfoods[0].price }}</span>
 								</section>
 								<section v-if="food.specfoods.length <= 1">
-									<span class="food_order_quantities_minus"
+									<img src="../../assets/minus.png" class="food_order_quantities_button" 
 									v-on:click="to_cart( 'reduce' , food.category_id , food.item_id , food.specfoods[0].food_id )"
-									>-</span>
-									<span class="food_order_quantities"> 2 </span>
-									<span class="food_order_quantities_plus"
-									v-on:click="to_cart( 'add' , food.category_id , food.item_id , food.specfoods[0].food_id )"
-									>+</span>
+									v-if="get_food_num( food.restaurant_id , food.category_id , food.item_id , food.specfoods[0].food_id )"
+									>
+									
+									<span class="food_order_quantities">{{ get_food_num( food.restaurant_id , food.category_id , food.item_id , food.specfoods[0].food_id ) }} </span>
+									
+									<img src="../../assets/add.png" class="food_order_quantities_button" v-on:click="to_cart( 'add' , food.category_id , food.item_id , food.specfoods[0].food_id )" >
+
 								</section>
 								
 								<section v-else>
+									<img src="../../assets/minus.png" class="food_order_quantities_button"
+									v-on:click="to_cart( 'reduce' , food.category_id , food.item_id , food.specfoods[0].food_id )"
+									v-if="get_food_num( food.restaurant_id , food.category_id , food.item_id )"
+									>
+									<span class="food_order_quantities"> {{ get_food_num( food.restaurant_id , food.category_id , food.item_id ) }} </span>
 									<span class="food_specification_enter">选规格</span>
 								</section>
 							</section>
@@ -100,9 +107,9 @@
 							<section class="food_price">
 								<span class="food_money">¥20</span>
 								<section>
-									<span class="food_order_quantities_minus">-</span>
+									<span class="food_order_quantities_button">-</span>
 									<span class="food_order_quantities"> 2 </span>
-									<span class="food_order_quantities_plus">+</span>
+									<span class="food_order_quantities_button">+</span>
 								</section>
 							</section>
 						</section>
@@ -129,9 +136,9 @@
 									<span class="food_money">¥20</span>
 								</section>
 								<section>
-									<span class="food_order_quantities_minus">-</span>
+									<span class="food_order_quantities_button">-</span>
 									<span class="food_order_quantities"> 2 </span>
-									<span class="food_order_quantities_plus">+</span>
+									<span class="food_order_quantities_button">+</span>
 								</section>
 							</section>
 						</section>
@@ -156,9 +163,9 @@
 							<section class="food_price">
 								<span class="food_money">¥20</span>
 								<section>
-									<span class="food_order_quantities_minus">-</span>
+									<span class="food_order_quantities_button">-</span>
 									<span class="food_order_quantities"> 2 </span>
-									<span class="food_order_quantities_plus">+</span>
+									<span class="food_order_quantities_button">+</span>
 								</section>
 							</section>
 						</section>
@@ -233,10 +240,10 @@
 						<span class="shop_cart_food_price">¥5</span>
 						<section>
 							<span 
-							class="food_order_quantities_minus"
+							class="food_order_quantities_button"
 							>-</span>
 							<span class="food_order_quantities"> 2 </span>
-							<span class="food_order_quantities_plus"
+							<span class="food_order_quantities_button"
 							>+</span>
 						</section>
 					</div>
@@ -298,6 +305,9 @@
 				return min_price
 			},
 			
+			
+			
+			
 			to_cart( type , category_id , item_id , food_id ){
 				let specific_category = this.valid_category_list[this.$shop.my_some( this.valid_category_list , 'id' , category_id , true )]
 				let specific_item = (specific_category.foods)[this.$shop.my_some( specific_category.foods , 'item_id' , item_id , true )]
@@ -349,18 +359,41 @@
 				window.console.log(this.user_shop_cart)
 			},
 			
-			// 辅助函数 挖掘object对象中 含有key 
-			deep_search_match( obj , key ){
+			
+			
+			
+			get_category_num( shop_id ,category_id){
+				let num = 0;
+				if ( this.user_shop_cart[shop_id] &&
+					this.user_shop_cart[shop_id][category_id]
+				){
+					num += this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id] , 'num' ))
+				}
 				
+				return num
 			},
 			
-			get_category_num(category_id){
+			get_food_num( shop_id , category_id , item_id , food_id = undefined ){
 				let num = 0;
-				if ( this.user_shop_cart[this.shop_id] &&
-					this.user_shop_cart[this.shop_id][category_id] &&
-				){
-					
+				if ( food_id != null ){
+					if ( this.user_shop_cart[shop_id] &&
+						this.user_shop_cart[shop_id][category_id] &&
+						this.user_shop_cart[shop_id][category_id][item_id] &&
+						this.user_shop_cart[shop_id][category_id][item_id][food_id] 
+					){
+						num = this.user_shop_cart[shop_id][category_id][item_id][food_id].num
+					}
 				}
+				else{
+					if ( this.user_shop_cart[shop_id] &&
+						this.user_shop_cart[shop_id][category_id] &&
+						this.user_shop_cart[shop_id][category_id][item_id]
+					){
+						num = this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id][item_id] , 'num' ))
+					}
+				}
+				
+				return num
 			},
 			
 			show_shop_cart(){
@@ -513,7 +546,7 @@
 		color: rgb(240, 115, 115);
 	}
 
-	.food img{
+	.food>img{
 		width: 5rem;
 		height: 5rem;
 		
@@ -566,6 +599,12 @@
 		display: flex;
 		
 		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.food_price>section:nth-last-of-type(1){
+		display: flex;
+		align-items: center;
 	}
 	
 	.food_money{
@@ -579,24 +618,17 @@
 		color: #666;
 	}
 	
-	.food_order_quantities_minus{
-		border: 0.035rem solid #3190E8;
-		border-radius: 50%;
-		padding: 0.15rem 0.385rem;
-		background: #FFFFFF;
-		
-		font-weight: bold;
-		color: #3190E8;
+	.food_order_quantities_button{
+		width: 1.6rem;
+		height: 1.6rem;
 	}
 	
-	.food_order_quantities_plus{
-		border: 0.03rem solid #3190E8;
-		border-radius: 50%;
-		padding: 0.15rem 0.385rem;
-		background: #3190E8;
-		
+	.food_order_quantities{
+		font-size: 1.1rem;
 		font-weight: bold;
-		color: #FFFFFF;
+		color: #666666;
+		
+		margin: 0 0.5rem;
 	}
 	
 	.food_specification_enter{

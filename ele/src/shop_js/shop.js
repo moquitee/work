@@ -73,6 +73,54 @@ shop.combinate = function ( obj1 , obj2 ){
 	return obj1
 }
 
+// 辅助函数 数组求和
+shop.sum = function ( arr ){
+	let result = 0;
+	for ( let i = 0 ; i < arr.length ; i++ ){
+		result += arr[i]
+	}
+	if ( typeof(result) === 'number'){
+		return result
+	}
+	else {
+		window.console.log('function->sum() throw an type error , please make sure the array containing the number only ')
+	}
+}
+
+// 辅助函数 挖掘object对象中 返回含有key的值的一个数组
+// 如果value,find_key 定义了，则返回含有key的object且value也对应且object里有find_key的值 提取组成的一个数组
+shop.deep_search_match = function ( obj , key , value = undefined , find_key = undefined ){
+	let arr = [];
+	
+	if ( value != undefined && find_key != undefined ){
+		(function f(obj){
+			if ( obj[key] && obj[key] == value && obj[find_key] != null ){
+				arr.push(obj[find_key])
+			}
+			
+			for ( let i in obj ){
+				if ( typeof(obj[i]) === 'object'){
+					f(obj[i])
+				}
+			}
+		})()
+	}
+	else {
+		(function g(obj){
+			if ( obj[key] != null ){
+				arr.push(obj[key])
+			}
+			for ( let i in obj ){
+				if ( typeof(obj[i]) === 'object' ){
+					g(obj[i])
+				}
+			}
+		})(obj)		
+	}
+	
+	return arr
+},
+
 shop.add_order = function ( food_id , anObject , days ){
 	if ( cookie.get(food_id) ){
 		let newObject = JSON.parse(cookie.get(food_id))
