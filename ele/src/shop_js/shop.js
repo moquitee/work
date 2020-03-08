@@ -65,10 +65,7 @@ obj2 = { 1:{4:{3:5}}}
 shop.combinate = function ( obj1 , obj2 ){
 	let keys1 = Object.keys(obj1);
 	let keys2 = Object.keys(obj2);
-	window.console.log('obj1')
-	window.console.log(obj1)
-	window.console.log('obj2')
-	window.console.log(obj2)
+
 	let intersection = shop.intersection( keys1 , keys2 )
 	if ( intersection.length && intersection.length == 1 ){
 		obj1[intersection[0]] = shop.combinate( obj1[intersection[0]] , obj2[intersection[0] ] )
@@ -128,6 +125,12 @@ shop.deep_search_match = function ( obj , key , value = undefined , find_key = u
 	return arr
 }
 
+//辅助函数 进入一个object第n层,输出一个数组,数组包含object第n层的{key:value}集合
+//obj = { 1:{ 2 : { 3 : { 4:5 } } }, 1:{ 2 : { 3 : { 5:4 } } } } 设 n =3  输出 arr = [ { 4:5 } , { 5:4 } ]
+shop.obj_to_arr2 = function (obj){
+	
+}
+
 // 辅助函数 将一个object,第一层转换成一个数组
 // obj = { b:1,c:2}
 // 返回 array = [ { b:1 }, { c:2 } ]
@@ -137,7 +140,6 @@ shop.obj_to_arr = function (obj){
 		arr.push({ [i]:obj[i] })
 	}
 	
-	window.console.log(arr)
 	return arr
 }
 

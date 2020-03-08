@@ -176,12 +176,17 @@
 		
 		<div v-if="specfoods_data && chosen_specfood">
 			<div class="food_specification">
-				<span class="food_shutdown_button" v-on:click="[specfoods_data , chosen_specfood] = [ undefined , undefined ]">×</span>
+				<span class="food_shutdown_button" v-on:click="specfoods_data= undefined">×</span>
 				<section class="food_specification_name">{{ chosen_specfood.name }}</section>
 				<section class="food_specification_container">
 					<h4 class="food_specification_title">规格</h4>
 					<ul class="food_specification_options">
-						<li v-for="specfood in specfoods_data" v-bind:key="specfood.food_id">{{ specfood.name }}</li>
+						<li v-for="specfood in specfoods_data" 
+						v-bind:key="specfood.food_id" 
+						v-on:click="chosen_specfood = specfood"
+						v-bind:class="{ active : chosen_specfood.food_id == specfood.food_id }"
+						>{{ specfood.name }}
+						</li>
 					</ul>
 				</section>
 				<section class="food_specification_footer">
@@ -189,11 +194,11 @@
 						<span class="food_specification_rmb">¥ </span>
 						<span class="food_specification_price">{{ chosen_specfood.price }}</span>
 					</span>
-					<button class="food_specification_add_to_cart">加入购物车</button>
+					<button class="food_specification_add_to_cart" v-on:click="to_cart( 'add' , chosen_specfood.category_id , chosen_specfood.item_id , chosen_specfood.food_id , true )">加入购物车</button>
 				</section>
 			</div>
 			
-			<div class="food_specification_cover" v-if="specfoods_data" v-on:click="[specfoods_data , chosen_specfood] = [ undefined , undefined ]"></div>
+			<div class="food_specification_cover" v-if="specfoods_data" v-on:click="specfoods_data= undefined"></div>
 		</div>
 		
 		<footer class="menu_footer" v-if="shop_info">
@@ -274,8 +279,8 @@
 				
 				order_list:[], // 用户购买的食物清单
 				
-				specfoods_data: undefined,
-				chosen_specfood: undefined,
+				specfoods_data: undefined, // 选规格页面 食物数据 []
+				chosen_specfood: undefined, // 用户在选规格 里面 选择的食品 {}
 			}
 		},
 		
@@ -310,8 +315,9 @@
 			
 			
 			
-			
-			to_cart( type , category_id , item_id , food_id ){
+			// 加入购物车,如果是在选规格中加入,将 is_specfood 设为 true
+			// type = 'add'时为+1 ; type = 'reduce'时为-1
+			to_cart( type , category_id , item_id , food_id , is_specfood = false ){
 				let specific_category = this.valid_category_list[this.$shop.my_some( this.valid_category_list , 'id' , category_id , true )]
 				let specific_item = (specific_category.foods)[this.$shop.my_some( specific_category.foods , 'item_id' , item_id , true )]
 				let specific_food = (specific_item.specfoods)[this.$shop.my_some( specific_item.specfoods , 'food_id' , food_id , true )]
@@ -343,19 +349,29 @@
 					this.user_shop_cart[this.shop_id][category_id][item_id][food_id] ){
 						if ( type == 'add' ){
 							this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num += 1;
+							this.chosen_specfood = undefined;
 						}
 						else if ( type == 'reduce' ){
 							if ( this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num <= 1 ){
 								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num = 0;
+								if ( is_specfood ){
+									this.chosen_specfood = undefined
+								}
 							}
 							else {
 								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num -= 1;
+								if ( is_specfood ){
+									this.chosen_specfood = undefined
+								}
 							}
 						}
 					}
 				else{
 					if ( type == 'add' ){
 						this.$store.commit('change_shop_cart', this.$shop.combinate( this.$store.state.user_shop_cart , food_object ) )
+						if ( is_specfood ){
+							this.chosen_specfood = undefined
+						}
 					}
 				}
 				
@@ -414,6 +430,8 @@
 				for ( let i = 0 ; i < this.specfoods_data.length ; i++ ){
 					this.specfoods_data[i].category_id = category_id
 				}
+				
+				this.chosen_specfood = this.specfoods_data[0]
 			},
 			
 			
