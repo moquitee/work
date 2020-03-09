@@ -185,7 +185,7 @@
 						v-bind:key="specfood.food_id" 
 						v-on:click="chosen_specfood = specfood"
 						v-bind:class="{ active : chosen_specfood.food_id == specfood.food_id }"
-						>{{ specfood.name }}
+						>{{ specfood.specs_name }}
 						</li>
 					</ul>
 				</section>
@@ -203,10 +203,10 @@
 		
 		<footer class="menu_footer" v-if="shop_info">
 			<section class="menu_footer_left">
-				<div class="cart_icon_container" v-bind:class="{ active : true }">
-					<img src="../../assets/shop_cart0.jpg" v-show="true">
-					<img src="../../assets/shop_cart1.jpg" v-show="false" v-on:click="show_shop_cart()">
-					<span class="cart_order_number" >2</span>
+				<div class="cart_icon_container" v-bind:class="{ active : total_order_num }">
+					<img src="../../assets/shop_cart1.jpg" v-if="total_order_num" v-on:click="show_shop_cart()">
+					<img src="../../assets/shop_cart0.jpg" v-else>
+					<span class="cart_order_number" v-if="total_order_num">{{ total_order_num }}</span>
 				</div>
 				<div>
 					<section class="total_price">¥ 20</section>
@@ -222,7 +222,8 @@
 		
 		<div class="footer_cover" v-show="shop_cart_state" v-on:click="show_shop_cart()"></div>
 		
-		<div class="shop_cart" style="display: none;"
+		<div class="shop_cart"
+		v-if="user_shop_cart"
 		v-bind:class="{ active : shop_cart_state }"
 		v-on:transitionend="shop_cart_move_end()"
 		ref="shop_cart"
@@ -231,25 +232,22 @@
 				<span class="shop_cart_title">购物车</span>
 				<div class="shop_cart_clear">
 					<img src="../../assets/trash_bin.png">
-					<span> 清空</span>
+					<span v-on:click="clear_shop_cart()"> 清空</span>
 				</div>
 			</section>
 			
 			<section class="shop_cart_food_container">
-				<section class="shop_cart_food" >
+				<section class="shop_cart_food" v-for="food in this.$shop.obj_to_arr2(user_shop_cart,4)" v-bind:key="food.id" v-show="food.quantity">
 					<div>
-						<section class="shop_cart_food_name">食物名字</section>
-						<section class="shop_cart_food_specs">特定名字</section>
+						<section class="shop_cart_food_name">{{ food.name }}</section>
+						<section class="shop_cart_food_specs">{{ food.specs[0] }}</section>
 					</div>
 					<div class="shop_cart_food_price_and_quantities">
-						<span class="shop_cart_food_price">¥5</span>
+						<span class="shop_cart_food_price">¥{{ food.price }}</span>
 						<section>
-							<span 
-							class="food_order_quantities_button"
-							>-</span>
-							<span class="food_order_quantities"> 2 </span>
-							<span class="food_order_quantities_button"
-							>+</span>
+							<img class="food_order_quantities_button" src="../../assets/minus.png" v-on:click="food.quantity -= 1 ">
+							<span class="food_order_quantities">{{ food.quantity }}</span>
+							<img class="food_order_quantities_button" src="../../assets/add.png" v-on:click="food.quantity += 1 ">
 						</section>
 					</div>
 				</section>
@@ -277,8 +275,6 @@
 				
 				shop_cart_state: 0, //0关闭 1打开
 				
-				order_list:[], // 用户购买的食物清单
-				
 				specfoods_data: undefined, // 选规格页面 食物数据 []
 				chosen_specfood: undefined, // 用户在选规格 里面 选择的食品 {}
 			}
@@ -299,6 +295,15 @@
 			
 			user_shop_cart(){
 				return this.$store.state.user_shop_cart
+			},
+			
+			total_order_num(){
+				if ( this.user_shop_cart && this.user_shop_cart[this.shop_id] ){
+					return this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[this.shop_id] , 'quantity' ))
+				}
+				else{
+					return 0
+				}
 			}
 		},
 		
@@ -332,9 +337,9 @@
 									packing_fee : specific_food.packing_fee,
 									price: specific_food.price,
 									sku_id : specific_food.sku_id,
-									specs: specific_food.specs_name,
+									specs: [specific_food.specs_name],
 									stock: specific_food.stock,
-									num : 1,
+									quantity : 1,
 								}
 							}
 						}
@@ -348,18 +353,18 @@
 					this.user_shop_cart[this.shop_id][category_id][item_id] && 
 					this.user_shop_cart[this.shop_id][category_id][item_id][food_id] ){
 						if ( type == 'add' ){
-							this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num += 1;
+							this.user_shop_cart[this.shop_id][category_id][item_id][food_id].quantity += 1;
 							this.chosen_specfood = undefined;
 						}
 						else if ( type == 'reduce' ){
-							if ( this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num <= 1 ){
-								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num = 0;
+							if ( this.user_shop_cart[this.shop_id][category_id][item_id][food_id].quantity <= 1 ){
+								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].quantity = 0;
 								if ( is_specfood ){
 									this.chosen_specfood = undefined
 								}
 							}
 							else {
-								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].num -= 1;
+								this.user_shop_cart[this.shop_id][category_id][item_id][food_id].quantity -= 1;
 								if ( is_specfood ){
 									this.chosen_specfood = undefined
 								}
@@ -380,18 +385,19 @@
 			
 			
 			
-			
+			// 获取食物种类数量 返回一个数字
 			get_category_num( shop_id ,category_id){
 				let num = 0;
 				if ( this.user_shop_cart[shop_id] &&
 					this.user_shop_cart[shop_id][category_id]
 				){
-					num += this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id] , 'num' ))
+					num += this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id] , 'quantity' ))
 				}
 				
 				return num
 			},
 			
+			// 获取食物数量 返回一个数字
 			get_food_num( shop_id , category_id , item_id , food_id = undefined ){
 				let num = 0;
 				if ( food_id != null ){
@@ -400,7 +406,7 @@
 						this.user_shop_cart[shop_id][category_id][item_id] &&
 						this.user_shop_cart[shop_id][category_id][item_id][food_id] 
 					){
-						num = this.user_shop_cart[shop_id][category_id][item_id][food_id].num
+						num = this.user_shop_cart[shop_id][category_id][item_id][food_id].quantity
 					}
 				}
 				else{
@@ -408,14 +414,14 @@
 						this.user_shop_cart[shop_id][category_id] &&
 						this.user_shop_cart[shop_id][category_id][item_id]
 					){
-						num = this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id][item_id] , 'num' ))
+						num = this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[shop_id][category_id][item_id] , 'quantity' ))
 					}
 				}
 				
 				return num
 			},
 			
-			
+			// 打开选规格窗口
 			open_specs( category_id , item_id ){
 				for ( let i = 0 ; i < this.valid_category_list.length ; i++ ){
 					if ( this.valid_category_list[i].id == category_id ){
@@ -434,9 +440,13 @@
 				this.chosen_specfood = this.specfoods_data[0]
 			},
 			
+			// 购物车中的清空按钮
+			clear_shop_cart(){
+				this.$store.commit('clear_shop_cart', this.shop_id )
+				this.show_shop_cart();
+			},
 			
-			
-			
+			// 显示或隐藏购物车的按钮
 			show_shop_cart(){
 				if (this.shop_cart_state == 0){
 					this.$refs.shop_cart.removeAttribute("style")
@@ -452,6 +462,7 @@
 				
 			},
 			
+			// 购物车显示或者隐藏的函数 在购物车显示或隐藏的动画结束后调用
 			shop_cart_move_end(){
 				if (this.shop_cart_state == 0){
 					this.$refs.shop_cart.style.display = "none"
@@ -822,6 +833,7 @@
 	.shop_cart_food{
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		
 		background: #FFFFFF;
 		
@@ -834,8 +846,6 @@
 	}
 	
 	.shop_cart_food_specs{
-		padding-left: 0.2rem;
-		
 		color: #666;
 		font-size: 0.7rem;
 	}
@@ -852,8 +862,9 @@
 		display: flex;
 	}
 	
-	.shop_cart_food div span{
-		vertical-align: middle;
+	.shop_cart_food_price_and_quantities>section{
+		display: flex;
+		align-items: center;
 	}
 	
 	.menu_footer{

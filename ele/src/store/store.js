@@ -53,6 +53,12 @@ const mutations = {
 	
 	change_shop_cart( state , value ){
 		state.user_shop_cart = value 
+	},
+	
+	clear_shop_cart( state , shop_id ){
+		if ( state.user_shop_cart[shop_id] ){
+			Vue.delete(state.user_shop_cart,shop_id)
+		}
 	}
 };
 

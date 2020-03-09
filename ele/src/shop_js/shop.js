@@ -77,7 +77,7 @@ shop.combinate = function ( obj1 , obj2 ){
 	return obj1
 }
 
-// 辅助函数 数组求和
+// 辅助函数 数组求和 确保数组里全部是数字，否则会报错
 shop.sum = function ( arr ){
 	let result = 0;
 	for ( let i = 0 ; i < arr.length ; i++ ){
@@ -87,7 +87,7 @@ shop.sum = function ( arr ){
 		return result
 	}
 	else {
-		window.console.log('function->sum() throw an type error , please make sure the array containing the number only ')
+		window.console.error('function->sum() throw an type error , please make sure the array containing the number only ')
 	}
 }
 
@@ -125,10 +125,26 @@ shop.deep_search_match = function ( obj , key , value = undefined , find_key = u
 	return arr
 }
 
-//辅助函数 进入一个object第n层,输出一个数组,数组包含object第n层的{key:value}集合
+//辅助函数 进入一个object第n层,输出一个数组,数组包含object第n层的value集合
 //obj = { 1:{ 2 : { 3 : { 4:5 } } }, 1:{ 2 : { 3 : { 5:4 } } } } 设 n =3  输出 arr = [ { 4:5 } , { 5:4 } ]
-shop.obj_to_arr2 = function (obj){
-	
+shop.obj_to_arr2 = function (obj,n){
+	//新建一个array，用来装结果
+	let arr = [];
+	(function f(obj,n){
+		if ( n > 1 ){
+			for ( let i in obj){
+				if ( typeof(obj[i]) === 'object' ){
+					f(obj[i],n-1)
+				}
+			}
+		}
+		else if ( n == 1 ){
+			for ( let i in obj){
+				arr.push( obj[i] )
+			}
+		}
+	})(obj,n)
+	return arr
 }
 
 // 辅助函数 将一个object,第一层转换成一个数组
