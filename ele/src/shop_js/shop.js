@@ -125,6 +125,23 @@ shop.deep_search_match = function ( obj , key , value = undefined , find_key = u
 	return arr
 }
 
+//辅助函数 挖掘obj, 遍历每一层 , 每一层里的m,n作为key的value相乘 , 返回一个包含每个相乘的结果的数组
+shop.deep_search_multiple = function (obj,key1,key2){
+	let arr = [];
+	(function f(obj,key1,key2){
+		if ( obj[key1] != null && obj[key2] != null ){
+			arr.push( (obj[key1] * obj[key2]) )
+		}
+		for ( let i in obj ){
+			if ( typeof(obj[i]) === 'object' ){
+				f( obj[i] , key1 , key2 )
+			}
+		}
+	})(obj,key1,key2)
+	
+	return arr 
+}
+
 //辅助函数 进入一个object第n层,输出一个数组,数组包含object第n层的value集合
 //obj = { 1:{ 2 : { 3 : { 4:5 } } }, 1:{ 2 : { 3 : { 5:4 } } } } 设 n =3  输出 arr = [ { 4:5 } , { 5:4 } ]
 shop.obj_to_arr2 = function (obj,n){

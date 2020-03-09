@@ -209,14 +209,14 @@
 					<span class="cart_order_number" v-if="total_order_num">{{ total_order_num }}</span>
 				</div>
 				<div>
-					<section class="total_price">¥ 20</section>
-					<section class="shop_delivery_fee">配送费¥5</section>
+					<section class="total_price">¥ {{ total_price }}</section>
+					<section class="shop_delivery_fee">配送费¥{{ delivery_fee }}</section>
 				</div>
 			</section>
 			
-			<section class="menu_footer_right">
-				<span>还差¥5起送</span>
-				<span v-show="false">去结算</span>
+			<section class="menu_footer_right" v-bind:class="{ active : total_price - minimum_order_amount >= 0 }">
+				<span v-if="total_price - minimum_order_amount < 0">还差¥{{ minimum_order_amount - total_price }}起送</span>
+				<span v-else>去结算</span>
 			</section>
 		</footer>
 		
@@ -260,6 +260,7 @@
 	export default{
 		created() {
 			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/shopping/getcategory/' + this.shop_id , method: 'GET' , which: 11 , renewway:'set' }).then((result)=>{
+				// 将获取到的食物列表进行筛查，取有效的食物列表
 				if ( result.status ){
 					this.valid_category_list = this.$shop.screen_valid_data(result.category_list)
 				}
@@ -271,32 +272,42 @@
 		
 		data(){
 			return{
-				valid_category_list:[],
+				valid_category_list:[], // 有效的食物种类列表 里面是集合object
 				
-				shop_cart_state: 0, //0关闭 1打开
 				
 				specfoods_data: undefined, // 选规格页面 食物数据 []
 				chosen_specfood: undefined, // 用户在选规格 里面 选择的食品 {}
+				
+				shop_cart_state: 0, //购物车状态 0关闭 1打开
 			}
 		},
 		
 		computed:{
+			// 商店id
 			shop_id(){
 				return this.$route.params.shop_id
 			},
 			
+			// 地理位置hash
 			geo_hash(){
 				return this.$cookie.get('longitude') + ',' + this.$cookie.get('latitude')
 			},
 			
+			// 店铺信息
 			shop_info(){
 				return this.$store.state.acquireData[10]
 			},
 			
+			
+			
+			//用户购物车 数据
 			user_shop_cart(){
 				return this.$store.state.user_shop_cart
 			},
 			
+			
+			
+			//购物车里的食物总数
 			total_order_num(){
 				if ( this.user_shop_cart && this.user_shop_cart[this.shop_id] ){
 					return this.$shop.sum(this.$shop.deep_search_match( this.user_shop_cart[this.shop_id] , 'quantity' ))
@@ -304,10 +315,26 @@
 				else{
 					return 0
 				}
-			}
+			},
+			
+			// 购物车里食物的总价格
+			total_price(){
+				return this.$shop.sum(this.$shop.deep_search_multiple( this.user_shop_cart , 'price' , 'quantity' ))
+			},
+			
+			// 配送费
+			delivery_fee(){
+				return this.$store.state.acquireData[10].float_delivery_fee
+			},
+			
+			// 最小配送价格
+			minimum_order_amount(){
+				return this.$store.state.acquireData[10].float_minimum_order_amount
+			},
 		},
 		
 		methods:{
+			// 选规格按钮，一个item有多种食物，取食物最小价格展示出来
 			get_the_smaller_price( specfoods_arr ){
 				let min_price = specfoods_arr[0].price;
 				for ( let i = 1 ; i < specfoods_arr.length ; i++ ){
@@ -346,6 +373,7 @@
 					}
 				};
 				
+				// 如果食物已经在购物车中存在
 				if (
 					this.user_shop_cart && 
 					this.user_shop_cart[this.shop_id] && 
@@ -381,6 +409,45 @@
 				}
 				
 				window.console.log(this.user_shop_cart)
+			},
+			
+			// 加入购物车 操作localStorage
+			// 接受{shop_id:{category_id:{item_id:{food_id:{food}}}}}
+			to_cart_localStorage( type , category_id , item_id , food_id , food_obj ){
+				let loc = JSON.parse(localStorage)
+				// 判断localStorage.shop_cart是否存在
+				if ( loc.shop_cart ){
+					// 如果食物已经在localStorage中存在
+					if (
+					loc.shop_cart[this.shop_id] && 
+					loc.shop_cart[this.shop_id][category_data] &&
+					loc.shop_cart[this.shop_id][category_data][item_id] &&
+					loc.shop_cart[this.shop_id][category_data][item_id][food_id]
+					){
+						if ( type == 'add' ){
+							(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity += 1
+						}
+						else if ( type == 'reduce' ){
+							if ( (loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity ){
+								(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity -= 1
+							}
+							else{
+								(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity = 0
+							}
+						}
+					}
+					else if {
+						
+					}
+				}
+				// 如果loclocalStorage.shop_cart不在，直接添加shop_cart,食物
+				else {
+					//添加shop_cart属性
+					loc.shop_cart = {}
+					loc.shop_cart[shop_id] = 
+				}
+				
+					
 			},
 			
 			
@@ -469,6 +536,8 @@
 				}
 			},
 			
+			
+			// 买单，对应商店id 结帐
 			check_out(){
 				
 			}
