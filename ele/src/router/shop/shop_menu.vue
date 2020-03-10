@@ -216,7 +216,7 @@
 			
 			<section class="menu_footer_right" v-bind:class="{ active : total_price - minimum_order_amount >= 0 }">
 				<span v-if="total_price - minimum_order_amount < 0">还差¥{{ minimum_order_amount - total_price }}起送</span>
-				<span v-else>去结算</span>
+				<span v-else v-on:click="check_out()">去结算</span>
 			</section>
 		</footer>
 		
@@ -518,7 +518,18 @@
 			
 			// 买单，对应商店id 结帐
 			check_out(){
+				let check_out_obj = {
+					come_from : 'web',
+					geo_hash: this.geo_hash,
+					restaurant_id: this.shop_id,
+					entities:
+				}
 				
+				this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/carts/checkout' , method: 'POST' , which: 27 , renewway:'set' , appendix: {
+					headers:{ 'content-type' : 'application/json' },
+					credentials: 'include',
+					body: JSON.stringify(check_out_obj) 
+					} })
 			}
 		}
 	}
