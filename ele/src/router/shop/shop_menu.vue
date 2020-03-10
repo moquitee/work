@@ -222,8 +222,8 @@
 		
 		<div class="footer_cover" v-show="shop_cart_state" v-on:click="show_shop_cart()"></div>
 		
-		<div class="shop_cart"
-		v-if="user_shop_cart"
+		<div class="shop_cart" style="display: none;"
+		v-if="user_shop_cart && user_shop_cart[shop_id]"
 		v-bind:class="{ active : shop_cart_state }"
 		v-on:transitionend="shop_cart_move_end()"
 		ref="shop_cart"
@@ -237,7 +237,7 @@
 			</section>
 			
 			<section class="shop_cart_food_container">
-				<section class="shop_cart_food" v-for="food in this.$shop.obj_to_arr2(user_shop_cart,4)" v-bind:key="food.id" v-show="food.quantity">
+				<section class="shop_cart_food" v-for="food in this.$shop.obj_to_arr2(user_shop_cart[shop_id],3)" v-bind:key="food.id" v-show="food.quantity">
 					<div>
 						<section class="shop_cart_food_name">{{ food.name }}</section>
 						<section class="shop_cart_food_specs">{{ food.specs[0] }}</section>
@@ -260,9 +260,14 @@
 	export default{
 		created() {
 			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/shopping/getcategory/' + this.shop_id , method: 'GET' , which: 11 , renewway:'set' }).then((result)=>{
-				// 将获取到的食物列表进行筛查，取有效的食物列表
 				if ( result.status ){
+					// 将获取到的食物列表进行筛查，取有效的食物列表
 					this.valid_category_list = this.$shop.screen_valid_data(result.category_list)
+					
+					// 将localStorage中的购物车数据存进购物车
+					if ( localStorage.shop_cart ){
+						this.$store.state.user_shop_cart = JSON.parse(localStorage.shop_cart)
+					}
 				}
 			})
 			
@@ -319,7 +324,12 @@
 			
 			// 购物车里食物的总价格
 			total_price(){
-				return this.$shop.sum(this.$shop.deep_search_multiple( this.user_shop_cart , 'price' , 'quantity' ))
+				if ( this.user_shop_cart && this.user_shop_cart[this.shop_id] ){
+					return this.$shop.sum(this.$shop.deep_search_multiple( this.user_shop_cart[this.shop_id] , 'price' , 'quantity' ))
+				}
+				else{
+					return 0
+				}
 			},
 			
 			// 配送费
@@ -331,6 +341,16 @@
 			minimum_order_amount(){
 				return this.$store.state.acquireData[10].float_minimum_order_amount
 			},
+		},
+		
+		watch:{
+			// 深度观察购物车，购物车发生变化，更新localStorage中的shop_cart
+			user_shop_cart:{
+				handler( new_value ){
+					localStorage.setItem('shop_cart',JSON.stringify(new_value))
+				},
+				deep: true,
+			}
 		},
 		
 		methods:{
@@ -407,50 +427,9 @@
 						}
 					}
 				}
-				
-				window.console.log(this.user_shop_cart)
 			},
 			
-			// 加入购物车 操作localStorage
-			// 接受{shop_id:{category_id:{item_id:{food_id:{food}}}}}
-			to_cart_localStorage( type , category_id , item_id , food_id , food_obj ){
-				let loc = JSON.parse(localStorage)
-				// 判断localStorage.shop_cart是否存在
-				if ( loc.shop_cart ){
-					// 如果食物已经在localStorage中存在
-					if (
-					loc.shop_cart[this.shop_id] && 
-					loc.shop_cart[this.shop_id][category_data] &&
-					loc.shop_cart[this.shop_id][category_data][item_id] &&
-					loc.shop_cart[this.shop_id][category_data][item_id][food_id]
-					){
-						if ( type == 'add' ){
-							(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity += 1
-						}
-						else if ( type == 'reduce' ){
-							if ( (loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity ){
-								(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity -= 1
-							}
-							else{
-								(loc.shop_cart[this.shop_id][category_data][item_id][food_id]).quantity = 0
-							}
-						}
-					}
-					else if {
-						
-					}
-				}
-				// 如果loclocalStorage.shop_cart不在，直接添加shop_cart,食物
-				else {
-					//添加shop_cart属性
-					loc.shop_cart = {}
-					loc.shop_cart[shop_id] = 
-				}
-				
-					
-			},
-			
-			
+
 			
 			// 获取食物种类数量 返回一个数字
 			get_category_num( shop_id ,category_id){

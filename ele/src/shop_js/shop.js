@@ -1,4 +1,4 @@
-import cookie from '../global/cookie.js';
+// import cookie from '../global/cookie.js';
 
 /*在文件的开始先定义一个对象*/
 const shop = {};
@@ -176,7 +176,7 @@ shop.obj_to_arr = function (obj){
 	return arr
 }
 
-
+/* 已废弃
 shop.add_order = function ( food_id , anObject , days ){
 	if ( cookie.get(food_id) ){
 		let newObject = JSON.parse(cookie.get(food_id))
@@ -199,6 +199,7 @@ shop.reduce_order = function ( food_id , anObject , days ){
 		cookie.del( food_id )
 	}
 }
+*/
 
 
 shop.get_valid_img_url = function ( url ){
