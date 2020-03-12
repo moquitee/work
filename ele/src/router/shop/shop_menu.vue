@@ -374,6 +374,7 @@
 				let specific_item = (specific_category.foods)[this.$shop.my_some( specific_category.foods , 'item_id' , item_id , true )]
 				let specific_food = (specific_item.specfoods)[this.$shop.my_some( specific_item.specfoods , 'food_id' , food_id , true )]
 				
+				
 				let food_object = {
 					[ this.shop_id ]: {
 						[ category_id ] : {
@@ -385,7 +386,7 @@
 									packing_fee : specific_food.packing_fee,
 									price: specific_food.price,
 									sku_id : specific_food.sku_id,
-									specs: [specific_food.specs_name],
+									specs: [ is_specfood ? specific_food.specs_name : '' ],
 									stock: specific_food.stock,
 									quantity : 1,
 								}

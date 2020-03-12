@@ -99,15 +99,15 @@
 					<p>配送费</p>
 					<div class="ordered_food_quantity_and_price">
 						<span>X1</span>
-						<span>¥4</span>
+						<span>¥{{ check_out_info.cart.deliver_amount }}</span>
 					</div>
 				</section>
 				
-				<section class="order_total_price">
-					<p>订单 ¥1432</p>
+				<section class="order_total_price" v-if="check_out_info.cart">
+					<p>订单 ¥{{ check_out_info.cart.original_total }}</p>
 					<div>
 						<p>待支付</p>
-						<p>¥1432</p>
+						<p>¥{{ check_out_info.cart.total }}</p>
 					</div>
 				</section>
 			</section>
@@ -172,6 +172,10 @@
 				</ul>
 			</section>
 		</section>
+		
+		
+		
+		<router-view class="confirm_order_extra_info_page"></router-view>
 	</div>
 </template>
 
@@ -559,5 +563,19 @@
 	
 	.choose_type_list>ul>li>svg ellipse.chosen{
 		fill: #4cd964;
+	}
+	
+	.confirm_order_extra_info_page{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		
+		z-index: 300;
+		
+		padding-top: 4rem;
+		
+		background: #f5f5f5;
 	}
 </style>

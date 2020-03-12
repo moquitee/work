@@ -14,6 +14,8 @@ import food_detail from './router/shop/food_detail.vue';
 import shop_safe from './router/shop/shop_safe.vue';
 
 import confirm_order from './router/shop/confirm_order.vue';
+import check_mark from './router/shop/confirm_order/check_mark.vue'
+import invoice from './router/shop/confirm_order/invoice.vue'
 
 import user from './router/user/user.vue';
 import user_info from './router/user/user_info.vue';
@@ -97,6 +99,18 @@ const routes = [
 				name:'confirm_order',
 				path:'confirm_order',
 				components: { full_page: confirm_order },
+				children:[
+					{
+						name:'check_mark',
+						path:'check_mark',
+						component: check_mark,
+					},
+					{
+						name:'invoice',
+						path:'invoice',
+						component: invoice,
+					}
+				]
 			}
 		]
 	},
