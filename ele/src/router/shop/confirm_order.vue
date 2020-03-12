@@ -1,5 +1,5 @@
 <template>
-	<div class="confirm_order_page">
+	<div class="confirm_order_page" v-if="check_out_info && check_out_info.id != null ">
 		<header class="confirm_order_header">
 			<span v-on:click="$router.go(-1)">&lt;</span>
 			<h2>确认订单</h2>
@@ -8,7 +8,7 @@
 			</svg>
 		</header>
 		
-		<section class="shop_address_container" style="display: none;">
+		<section class="shop_address_container" v-if="user_address && user_address.length">
 			<div class="shop_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -31,7 +31,7 @@
 			<span class="shop_address_right">&gt;</span>
 		</section>
 		
-		<section class="shop_empty_address_container">
+		<section class="shop_empty_address_container" v-else>
 			<div class="empty_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -49,13 +49,13 @@
 			</div>
 			
 			<div class="shop_delivery_right">
-				<p>尽快送达|预计00:47</p>
-				<p>蜂鸟专送</p>
+				<p>尽快送达|预计{{ check_out_info.delivery_reach_time }}</p>
+				<p v-if="check_out_info.is_support_ninja">蜂鸟专送</p>
 			</div>
 		</section>
 		
 		<section class="pay_methods_container">
-			<section class="order_item_style">
+			<section class="order_item_style" v-on:click="paymethods_display = true ">
 				<span>支付方式</span>
 				
 				<div class="more_type">
@@ -71,27 +71,27 @@
 		</section>
 		
 		<section class="order_foods_container">
-			<header>
-				<img src="../../assets/longmao.jpg">
-				<span>效果演示</span>
+			<header v-if="check_out_info.cart.restaurant_info">
+				<img v-bind:src="'//elm.cangdu.org/img/' + check_out_info.cart.restaurant_info.image_path">
+				<span>{{ check_out_info.cart.restaurant_info.name }}</span>
 			</header>
 			
-			<section class="order_foods_list_container">
+			<section class="order_foods_list_container" v-if="check_out_info.cart.groups && check_out_info.cart.groups.length">
 				<ul>
-					<li class="food_list_item">
-						<p>食物名称</p>
+					<li class="food_list_item" v-for="food in check_out_info.cart.groups[0]" v-bind:key="food.sku_id">
+						<p>{{ food.name }}</p>
 						<div class="ordered_food_quantity_and_price">
-							<span>X2</span>
-							<span>¥20</span>
+							<span>X{{ food.quantity }}</span>
+							<span>¥{{ food.price }}</span>
 						</div>
 					</li>
 				</ul>
 					
-				<section class="food_list_item">
-					<p>餐盒</p>
+				<section class="food_list_item" v-for="item in check_out_info.cart.extra" v-bind:key="item._id">
+					<p>{{ item.name }}</p>
 					<div class="ordered_food_quantity_and_price">
-						<span>X2</span>
-						<span>¥1893</span>
+						<span>X{{ item.quantity }}</span>
+						<span>¥{{ item.price }}</span>
 					</div>
 				</section>
 					
@@ -136,10 +136,87 @@
 			
 			<button>确认下单</button>
 		</footer>
+		
+		<!-- 支付方式 窗口 -->
+		<div class="cover" v-show="paymethods_display" v-on:click="paymethods_display = false"></div>
+		<section class="choose_type_container" v-if="check_out_info.payments && check_out_info.payments.length" v-show="paymethods_display" >
+			<header>支付方式</header>
+			<section class="choose_type_list">
+				<ul>
+					<li 
+					v-for="method in check_out_info.payments" 
+					v-bind:key="method.id"
+					v-on:click="choose_a_type( method.id , method.select_state )"
+					>
+						<span class="choose_text" v-bind:class="{ avalible : method.select_state > 0 }">{{ method.name }} <span v-if="method.disabled_reason">{{ method.description }}</span></span>
+						<svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="23.999999999999996" height="23.999999999999996">
+								<g>
+									<title>background</title>
+									<rect fill="none" id="canvas_background" height="26" width="26" y="-1" x="-1"/>
+									<g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+										<rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+									</g>
+								</g>
+								<g>
+									<title>Layer 1</title>
+									<ellipse v-bind:class="{ chosen: paymethod_id == method.id }"
+									ry="11" rx="11" id="svg_2" cy="12" cx="12" stroke-width="0.1" stroke="#eeeeee"/>
+									<line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="16.549156" x2="9.450651" y1="12.562877" x1="5.464372" stroke="#eeeeee" fill="none"/>
+									<line stroke-linecap="null" stroke-linejoin="null" id="svg_5" y2="18" x2="11" y1="13" x1="5" stroke-width="2" stroke="#ffffff" fill="none"/>
+									<line stroke="#ffffff" stroke-linecap="null" stroke-linejoin="null" id="svg_6" y2="8" x2="18.5" y1="17.94148" x1="9.717221" stroke-width="2" fill="none"/>
+								</g>
+							</svg>
+						</svg>
+					</li>
+				</ul>
+			</section>
+		</section>
 	</div>
 </template>
 
 <script>
+	export default{
+		created() {
+			// 获取用户地址信息
+			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'});
+		},
+		
+		data(){
+			return {
+				paymethods_display: false, // false时不显示pay_methods窗口 , 反之显示
+				
+				paymethod_id: 1,
+			}
+		},
+		
+		computed:{
+			shop_id(){
+				return this.$route.params.shop_id
+			},
+			
+			user_id(){
+				return this.$store.state.acquireData[17].user_id
+			},
+			
+			user_address(){
+				return this.$store.state.acquireData[20]
+			},
+			
+			check_out_info(){
+				return this.$store.state.acquireData[27]
+			},
+		},
+		
+		methods:{
+			choose_a_type( id , state ){
+				if ( state && state > 0 ){
+					this.paymethod_id = id
+					this.paymethods_display = false
+				}
+			}
+		}
+	}
 </script>
 
 <style>
@@ -425,5 +502,62 @@
 		
 		font-size: 1.5rem;
 		color: #FFFFFF;
+	}
+	
+	
+	.choose_type_container{
+		position: fixed;
+		bottom: 0;
+		z-index: 201;
+		
+		width: 100%;
+		height: 19rem;
+		
+		background: #FFFFFF;
+	}
+	
+	.choose_type_container>header{
+		width: 100%;
+		height: 3.5rem;
+		
+		text-align: center;
+		line-height: 3.5rem;
+		
+		font-size: 1.3rem;
+		background-color: #fafafa;
+	}
+	
+	.choose_type_list{
+		width: 100%;
+	}
+	
+	.choose_type_list>ul>li{
+		display: flex;
+		justify-content: space-between;
+		align-items: cneter;
+		
+		padding: 1.5rem;
+	}
+	
+	.choose_type_list>ul>li>span{
+		font-size: 1.3rem;
+		color: #CCCCCC;
+	}
+	
+	.choose_type_list>ul>li>svg{
+		width: 1.6rem;
+		height: 1.6rem;
+	}
+	
+	.choose_type_list>ul>li>svg ellipse{
+		fill: #eeeeee;
+	}
+	
+	.choose_type_list>ul>li>span.avalible{
+		color: #333333;
+	}
+	
+	.choose_type_list>ul>li>svg ellipse.chosen{
+		fill: #4cd964;
 	}
 </style>

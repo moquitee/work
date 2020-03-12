@@ -379,6 +379,7 @@
 						[ category_id ] : {
 							[ item_id ] : {
 								[ food_id ] : {
+									attrs: specific_item.attrs,
 									id : food_id,
 									name : specific_food.name,
 									packing_fee : specific_food.packing_fee,
@@ -516,20 +517,32 @@
 			},
 			
 			
-			// 买单，对应商店id 结帐
+			// checkout，对应商店id 
 			check_out(){
-				let check_out_obj = {
-					come_from : 'web',
-					geo_hash: this.geo_hash,
-					restaurant_id: this.shop_id,
-					entities:
+				//checkout需要食物object都带上attrs:[],extra:{},
+				let food_list = this.$shop.obj_to_arr2(this.user_shop_cart[this.shop_id],3);
+				for ( let i = 0 ; i < food_list.length ; i++ ){
+					food_list[i].extra = {};
 				}
 				
+				let check_out_obj = {
+					come_from:"web",
+					geohash: this.geo_hash,
+					entities: [food_list],
+					restaurant_id: 1,
+					}
+				
+				window.console.log(check_out_obj)
+				
 				this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/carts/checkout' , method: 'POST' , which: 27 , renewway:'set' , appendix: {
-					headers:{ 'content-type' : 'application/json' },
+					headers:{ 'Content-Type' : 'application/json; charset=utf-8' },
 					credentials: 'include',
 					body: JSON.stringify(check_out_obj) 
-					} })
+					} }).then((result)=>{
+						if ( result.id ){
+							this.$router.push({ name : 'confirm_order' })
+						}
+					})
 			}
 		}
 	}
