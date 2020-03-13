@@ -114,10 +114,10 @@
 		</section>
 		
 		<section class="pay_methods_container">
-			<header class="order_item_style">
+			<header class="order_item_style" v-on:click="$router.push({ name: 'check_mark' })">
 				<span>订单备注</span>
 				<div class="more_type">
-					<span>口味、偏好等</span>
+					<span class="ellipsis">{{ check_remarks? check_remarks : '口味、偏好等' }}</span>
 					<span>&gt;</span>
 				</div>
 			</header>
@@ -184,6 +184,11 @@
 		created() {
 			// 获取用户地址信息
 			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'});
+			
+			//监听 接收备注信息
+			this.$root.$on('accpet_check_remark',(remarks)=>{
+				this.check_remarks = remarks
+			})
 		},
 		
 		data(){
@@ -191,6 +196,8 @@
 				paymethods_display: false, // false时不显示pay_methods窗口 , 反之显示
 				
 				paymethod_id: 1,
+				
+				check_remarks:''
 			}
 		},
 		
@@ -368,6 +375,10 @@
 		margin: 0.6rem 0;
 		
 		background-color: #FFFFFF;
+	}
+	
+	.pay_methods_container:last-of-type{
+		margin-bottom: 5rem;
 	}
 	
 	.order_item_style{

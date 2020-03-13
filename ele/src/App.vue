@@ -45,6 +45,12 @@ export default {
 		border: none;
 	}
 	
+	.ellipsis{
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	
 	.cover{
 		position: fixed;
 		top: 0;
