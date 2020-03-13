@@ -8,7 +8,7 @@
 			</svg>
 		</header>
 		
-		<section class="shop_address_container" v-if="user_address && user_address.length">
+		<section class="shop_address_container" v-if="user_address && user_address.length" v-on:click="$router.push({ name: 'check_address' })">
 			<div class="shop_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -31,7 +31,7 @@
 			<span class="shop_address_right">&gt;</span>
 		</section>
 		
-		<section class="shop_empty_address_container" v-else>
+		<section class="shop_empty_address_container" v-else v-on:click="$router.push({ name: 'check_address' })">
 			<div class="empty_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -577,7 +577,7 @@
 	}
 	
 	.confirm_order_extra_info_page{
-		position: absolute;
+		position: fixed;
 		top: 0;
 		bottom: 0;
 		left: 0;

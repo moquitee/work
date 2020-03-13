@@ -13,9 +13,15 @@ import shop_detail from './router/shop/shop_detail.vue';
 import food_detail from './router/shop/food_detail.vue';
 import shop_safe from './router/shop/shop_safe.vue';
 
+
 import confirm_order from './router/shop/confirm_order.vue';
+import check_address from './router/shop/confirm_order/check_address.vue'
+import check_add_address from './router/shop/confirm_order/add_address/check_add_address.vue'
+import check_add_address_detail from './router/shop/confirm_order/add_address/check_add_address_detail.vue'
+
 import check_mark from './router/shop/confirm_order/check_mark.vue'
 import invoice from './router/shop/confirm_order/invoice.vue'
+
 
 import user from './router/user/user.vue';
 import user_info from './router/user/user_info.vue';
@@ -109,6 +115,25 @@ const routes = [
 						name:'invoice',
 						path:'invoice',
 						component: invoice,
+					},
+					{
+						name:'check_address',
+						path:'check_address',
+						component: check_address,
+						children:[
+							{
+								name:'check_add_address',
+								path:'check_add_address',
+								component: check_add_address,
+								children: [
+									{
+										name:'check_add_address_detail',
+										path:'check_add_address_detail',
+										component: check_add_address_detail,
+									},
+								],
+							}
+						]
 					}
 				]
 			}
