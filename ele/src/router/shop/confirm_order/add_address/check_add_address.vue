@@ -12,14 +12,14 @@
 					<input type="text" placeholder="你的名字" v-model="name">
 					<section>
 							<span class="address_sex">
-								<svg>
+								<svg v-bind:class="{ chosen : sex == 1 }" v-on:click="sex = 1">
 									<svg viewBox="0 0 120 120" width="100%" height="100%"><circle cx="60" cy="60" r="60"></circle><path fill="#FFF" d="M63.84 84.678a1.976 1.976 0 0 1-.387.545l-7.975 7.976a1.996 1.996 0 0 1-2.829-.005L24.172 64.716a2.005 2.005 0 0 1-.005-2.828l7.976-7.976a1.996 1.996 0 0 1 2.828.005l19.015 19.015L91.498 35.42a1.991 1.991 0 0 1 2.823 0l7.976 7.977c.784.784.78 2.043 0 2.823L63.84 84.678z"></path></svg>
 								</svg>
 								<span>先生</span>
 							</span>
 							
 							<span class="address_sex">
-								<svg>
+								<svg  v-bind:class="{ chosen : sex == 2 }" v-on:click="sex = 2">
 									<svg viewBox="0 0 120 120" width="100%" height="100%"><circle cx="60" cy="60" r="60"></circle><path fill="#FFF" d="M63.84 84.678a1.976 1.976 0 0 1-.387.545l-7.975 7.976a1.996 1.996 0 0 1-2.829-.005L24.172 64.716a2.005 2.005 0 0 1-.005-2.828l7.976-7.976a1.996 1.996 0 0 1 2.828.005l19.015 19.015L91.498 35.42a1.991 1.991 0 0 1 2.823 0l7.976 7.977c.784.784.78 2.043 0 2.823L63.84 84.678z"></path></svg>
 								</svg>
 								<span>女士</span>
@@ -58,7 +58,7 @@
 			<section>
 				<span>标签</span>
 				<section>
-					<input type="text" placeholder="无/家/学校/公司"/>
+					<input type="text" placeholder="无/家/学校/公司" v-model="tag"/>
 				</section>
 			</section>
 		</form>
@@ -97,8 +97,9 @@
 		data(){
 			return {
 				name:'',
-				phone:NaN,
-				phone_bk:NaN,
+				sex: 1,
+				phone:null,
+				phone_bk:null,
 				chosen_site:'',
 				
 				chosen_address_detail:{},
@@ -110,7 +111,43 @@
 				
 				show_phone_bk: false, //显示备用电话的按钮，true为显示，false为隐藏
 			}
+		},
+		
+		computed:{
+			user_id(){
+				return this.$store.state.acquireData[17].user_id
+			}
+		},
+		
+		methods:{
+			add_address_confirm(){
+				this.$store.dispatch('fetchData',{ url: 'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses' , method: 'POST' , which: 19 , renewway:'set' , appendix:{
+						credentials: 'include',
+						headers: { 'content-type' : 'application/json' },
+						body: JSON.stringify({
+							address: this.address_detail,
+							address_detail: this.chosen_address_detail.address_detail,
+							geohash: this.chosen_address_detail.geohash,
+							name: this.name,
+							phone: this.phone,
+							phone_bk: this.phone_bk,
+							sex: this.sex,
+							tag: this.tag,
+							tag_type: 1,
+						})
+					},
+				}).then((result)=>{
+					if ( result.message ){
+						this.alert_text = result.message
+					}
+					else{
+						this.$router.replace({ name : 'check_address' });
+						this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'});
+					}
+				})
+			}
 		}
+		
 	}
 </script>
 
@@ -167,7 +204,11 @@
 		
 		margin-right: 0.8rem;
 		
-		fill: #16A086;
+		fill: #F5F5F5;
+	}
+	
+	.address_input_form>section>section>section>span>svg.chosen{
+		fill: #4cd964;
 	}
 	
 	.check_add_address_plus{

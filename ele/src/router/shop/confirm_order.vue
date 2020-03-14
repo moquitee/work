@@ -8,7 +8,7 @@
 			</svg>
 		</header>
 		
-		<section class="shop_address_container" v-if="user_address && user_address.length" v-on:click="$router.push({ name: 'check_address' })">
+		<section class="shop_address_container" v-if="address" v-on:click="$router.push({ name: 'check_address' })">
 			<div class="shop_address_left">
 				<svg>
 					<svg viewBox="0 0 28 33" id="location" width="100%" height="100%"><g fill-rule="evenodd"><path d="M20.809 21.6L12.9 29.509h1.616l-7.992-7.992a13.003 13.003 0 0 1-.506-.478c-4.25-4.25-4.25-11.14 0-15.389s11.14-4.25 15.389 0c4.25 4.25 4.25 11.14 0 15.389a10.81 10.81 0 0 1-.543.508l-.056.052zm1.56 1.669c.225-.196.443-.401.656-.613 5.142-5.142 5.142-13.48 0-18.622s-13.48-5.142-18.622 0c-5.142 5.142-5.142 13.48 0 18.622.18.18.364.354.553.522l8.753 8.755 8.661-8.664z" class="path1"></path> <path d="M9.428 16.739a6.063 6.063 0 1 0 8.573-8.575 6.063 6.063 0 0 0-8.573 8.575zm1.616-1.616a3.776 3.776 0 1 1 5.34-5.341 3.776 3.776 0 0 1-5.34 5.341z" class="path2"></path></g></svg>
@@ -16,14 +16,15 @@
 				
 				<section class="order_user_info">
 					<header>
-						<span>用户名字</span>
-						<span>先生</span>
-						<span>13025689810</span>
+						<span>{{ address.name }}</span>
+						<span v-if="address.sex == 1">先生</span>
+						<span v-if="address.sex == 2">女士</span>
+						<span>{{ address.phone }}</span>
 					</header>
 					
 					<div class="order_address_detail">
-						<span>家</span>
-						<span>详细地址</span>
+						<span>{{ address.tag }}</span>
+						<span>{{ address.address_detail }}</span>
 					</div>
 				</section>
 			</div>
@@ -134,7 +135,7 @@
 		<footer class="order_footer">
 			<p>待支付 ¥1419</p>
 			
-			<button>确认下单</button>
+			<button v-on:click="confirm_order()">确认下单</button>
 		</footer>
 		
 		<!-- 支付方式 窗口 -->
@@ -175,6 +176,19 @@
 		
 		
 		
+		<div class="alert_container" v-if="alert_text">
+			<section class='tip_text_container'>
+				<div class="alert_icon">
+					<span></span>
+					<span></span>
+				</div>
+				<p>{{ alert_text }}</p>
+				<div class="login_alert_comfirm_button" v-on:click="alert_text = undefined">确认</div>
+			</section>
+		</div>
+		
+		
+		
 		<router-view class="confirm_order_extra_info_page"></router-view>
 	</div>
 </template>
@@ -183,27 +197,44 @@
 	export default{
 		created() {
 			// 获取用户地址信息
-			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'});
+			this.$store.dispatch('fetchData',{ url:'https://elm.cangdu.org/v1/users/' + this.user_id + '/addresses', method: 'GET' , which: 20 , renewway:'set'}).then(result=>{
+				if ( result && result.length ){
+					this.address = result[0]
+				}
+			});
 			
 			//监听 接收备注信息
 			this.$root.$on('accpet_check_remark',(remarks)=>{
 				this.check_remarks = remarks
-			})
+			});
+			
+			//监听 接收收货地址obj
+			this.$root.$on('check_address',(address=>{
+				this.address = address
+			}))
 		},
 		
 		data(){
 			return {
 				paymethods_display: false, // false时不显示pay_methods窗口 , 反之显示
 				
+				address: undefined,
+				
 				paymethod_id: 1,
 				
-				check_remarks:''
+				check_remarks:'',
+				
+				alert_text:undefined,
 			}
 		},
 		
 		computed:{
 			shop_id(){
 				return this.$route.params.shop_id
+			},
+			
+			geohash(){
+				return this.$cookie.get('longitude') + this.$cookie.get('latitude')
 			},
 			
 			user_id(){
@@ -224,6 +255,36 @@
 				if ( state && state > 0 ){
 					this.paymethod_id = id
 					this.paymethods_display = false
+				}
+			},
+			
+			confirm_order(){
+				if ( this.address == undefined ){
+					this.alert_text = '请选择地址'
+				}
+				else{
+					this.$store.dispatch('fetchData',{ url: 'http://elm.cangdu.org/v1/users/' + this.user_id + '/carts/' + this.check_out_info.cart.id +'/orders', method: 'POST' , which: 29 , renewway:'set' , appendix:{
+							credentials: 'include',
+							headers: { 'content-type' : 'application/json' },
+							body: JSON.stringify({
+								address_id: this.address.id,
+								come_from: 'mobile_web',
+								deliver_time: '',
+								description: '',
+								geohash: this.geohash,
+								paymethod_id: this.paymethod_id,
+								sig: this.check_out_info.sig,
+								entities: this.check_out_info.cart.groups,
+							})
+						},
+					}).then((result)=>{
+						if ( result.message ){
+							this.alert_text = result.message
+						}
+						else{
+							return
+						}
+					})
 				}
 			}
 		}
