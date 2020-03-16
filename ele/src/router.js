@@ -21,7 +21,7 @@ import check_add_address_detail from './router/shop/confirm_order/add_address/ch
 
 import check_mark from './router/shop/confirm_order/check_mark.vue'
 import invoice from './router/shop/confirm_order/invoice.vue'
-
+import payment from './router/shop/confirm_order/payment.vue'
 
 import user from './router/user/user.vue';
 import user_info from './router/user/user_info.vue';
@@ -135,6 +135,11 @@ const routes = [
 							}
 						]
 					},
+					{
+						name:'payment',
+						path:'payment',
+						component: payment,
+					}
 				]
 			}
 		]
