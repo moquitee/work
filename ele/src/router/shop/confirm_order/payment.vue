@@ -7,7 +7,7 @@
 		
 		<section class="payment_time">
 			<p>支付剩余时间</p>
-			<p>00:00:00</p>
+			<p>{{ this.time }}</p>
 		</section>
 		
 		<section class="payment_list">
@@ -57,11 +57,37 @@
 
 <script>
 	export default{
+		created() {
+			// 定义15分钟后的时间 
+			this.pay_end_time = new Date().getTime() + 900000
+			
+			this.showTime();
+		},
+		
 		data(){
 			return {
 				alert_text: undefined,
+				
+				pay_end_time: undefined,
+				
+				time: undefined,
 			}
 		},
+		
+		methods:{
+			showTime(){
+				let nowtime =  new Date();
+				let lefttime = this.pay_end_time - nowtime.getTime(), //距离结束时间的毫秒数
+					lefth = Math.floor(lefttime/(1000*60*60)%24), //计算小时数
+					leftm = Math.floor(lefttime/(1000*60)%24), //计算分钟数
+					lefts = Math.floor(lefttime/1000%60); //计算秒数
+					this.time = lefth + ":" + leftm + ":" + lefts
+					if ( lefth && leftm && lefts ){
+						setTimeout(this.showTime,1000)
+					}
+					
+			}
+		}
 	}
 </script>
 
